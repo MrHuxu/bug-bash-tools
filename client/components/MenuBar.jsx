@@ -2,9 +2,16 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
+import EditScores from './EditScores';
+import Organise from './Organise';
+
 const styles = {
+  btnContainer : {
+    padding : '10px 0 0 0'
+  },
+
   menubarBtn : {
-    margin : '10px 0 10px 12px'
+    margin : '0 15px 0 15px'
   }
 };
 
@@ -25,17 +32,9 @@ class MenuBar extends Component {
         <ToolbarGroup>
           <ToolbarTitle text = 'Bug Bash Tool' />
         </ToolbarGroup>
-        <ToolbarGroup>
-          <RaisedButton
-            secondary
-            style = {styles.menubarBtn}
-            label = 'Edit Scores'
-          />
-          <ToolbarSeparator />
-          <RaisedButton
-            primary
-            label = 'Organise Bug Bash'
-          />
+        <ToolbarGroup style = {styles.btnContainer}>
+          <EditScores style = {styles.menubarBtn} />
+          <Organise style = {styles.menubarBtn} />
         </ToolbarGroup>
       </Toolbar>
     );

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 class Dashboard extends Component {
@@ -21,7 +20,7 @@ class Dashboard extends Component {
     });
 
     return (
-      <div>
+      <div style = {this.props.style}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -44,8 +43,8 @@ class Dashboard extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    ids   : state.person.ids,
-    infos : state.person.infos
+    ids   : state.person.get('ids'),
+    infos : state.person.get('infos')
   };
 };
 
