@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 
-import EditScores from './EditScores';
-import Organise from './Organise';
+import AddBugBash from './AddBugBash';
 
 const styles = {
   btnContainer : {
@@ -33,8 +31,7 @@ class MenuBar extends Component {
           <ToolbarTitle text = 'Bug Bash Tool' />
         </ToolbarGroup>
         <ToolbarGroup style = {styles.btnContainer}>
-          <EditScores style = {styles.menubarBtn} />
-          <Organise style = {styles.menubarBtn} />
+          <AddBugBash style = {styles.menubarBtn} />
         </ToolbarGroup>
       </Toolbar>
     );
