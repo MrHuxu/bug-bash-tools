@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import RaisedButton from 'material-ui/RaisedButton';
 
-import AddBugBash from './AddBugBash';
+import EditBugBash from './EditBugBash';
 
 const styles = {
   btnContainer : {
@@ -14,15 +15,21 @@ const styles = {
 };
 
 class MenuBar extends Component {
+  state = {
+    open : false
+  };
 
-  constructor (props) {
-    super(props);
-    this.state = {
-      value : 3
-    };
-  }
+  handleOpen = () => {
+    this.setState({
+      open : true
+    });
+  };
 
-  handleChange = (event, index, value) => this.setState({value});
+  handleClose = () => {
+    this.setState({
+      open : false
+    });
+  };
 
   render () {
     return (
@@ -30,8 +37,16 @@ class MenuBar extends Component {
         <ToolbarGroup>
           <ToolbarTitle text = 'Bug Bash Tool' />
         </ToolbarGroup>
-        <ToolbarGroup style = {styles.btnContainer}>
-          <AddBugBash style = {styles.menubarBtn} />
+        <ToolbarGroup float = 'right'>
+          <RaisedButton
+            primary
+            label = 'Add Bug Bash'
+            onTouchTap = {this.handleOpen}
+          />
+          <EditBugBash
+            open = {this.state.open}
+            handleClose = {this.handleClose}
+          />
         </ToolbarGroup>
       </Toolbar>
     );

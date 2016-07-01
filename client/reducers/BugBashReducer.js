@@ -8,10 +8,10 @@ export function bugBash (state = Immutable.Map({
   ids   : Immutable.List.of(1),
   infos : Immutable.Map({
     1 : Immutable.Map({
-      name : 'test bug bash',
-      ticket: 'INK-3051',
+      name      : 'test bug bash',
+      ticket    : 'INK-3051',
       startTime : '2016-3-12 12:12',
-      endTime : '2016-3-12 14:12'
+      endTime   : '2016-3-12 14:12'
     })
   })
 }), action) {
@@ -23,7 +23,7 @@ export function bugBash (state = Immutable.Map({
       var copy = state.set('ids', state.get('ids').push(id));
       copy = copy.setIn(['infos', id.toString()], content);
       return copy;
-  
+
     default:
       return state;
   }

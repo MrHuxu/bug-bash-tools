@@ -17,9 +17,8 @@ const styles = {
   }
 };
 
-class AddBugBash extends Component {
+class EditBugBash extends Component {
   state = {
-    open      : false,
     name      : '',
     ticket    : '',
     startDate : '',
@@ -28,22 +27,16 @@ class AddBugBash extends Component {
     endTime   : ''
   };
 
-  handleOpen = () => {
-    this.setState({open: true});
-  };
-
-  handleClose = () => {
-    this.setState({open: false});
-  };
-
   handleSubmit = () => {
-    this.props.dispatch(addBugBash(Immutable.Map({
-      name: this.state.name,
-      ticket: this.state.ticket,
-      startTime: '',
-      endTime: ''
-    })));
-    this.setState({open: false});
+    if (this.state.name && this.state.name.length) {
+      this.props.dispatch(addBugBash(Immutable.Map({
+        name      : this.state.name,
+        ticket    : this.state.ticket,
+        startTime : '',
+        endTime   : ''
+      })));
+    }
+    this.props.handleClose();
   };
 
   handleUpdate (field) {
@@ -51,6 +44,7 @@ class AddBugBash extends Component {
   }
 
   render () {
+    const { data } = this.props;
     const actions = [
       <FlatButton
         label = 'Ok'
@@ -62,28 +56,25 @@ class AddBugBash extends Component {
 
     return (
       <div>
-        <RaisedButton
-          primary
-          label = 'Add Bug Bash'
-          onTouchTap = {this.handleOpen}
-        />
         <Dialog
           title = 'Dialog With Date Picker'
           actions = {actions}
           modal = {false}
-          open = {this.state.open}
-          onRequestClose = {this.handleClose}
+          open = {this.props.open}
+          onRequestClose = {this.props.handleClose}
         >
           <div style = {styles.halfPanel}>
             Name<br />
             <TextField
               id = 'name'
               onChange = {this.handleUpdate.bind(this, 'name')}
+              defaultValue = {data ? data.info.name : ''}
             /><br />
             Main Ticket<br />
             <TextField
               id = 'ticket'
               onChange = {this.handleUpdate.bind(this, 'ticket')}
+              defaultValue = {data ? data.info.ticket : ''}
             /><br />
           </div>
           <div style = {styles.halfPanel}>
@@ -124,4 +115,4 @@ class AddBugBash extends Component {
   }
 }
 
-export default connect()(AddBugBash);
+export default connect()(EditBugBash);
