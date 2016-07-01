@@ -9,13 +9,22 @@ export function bugBash (state = Immutable.Map({
   infos : Immutable.Map({
     1 : Immutable.Map({
       name : 'test bug bash',
-      info : Immutable.Map({
-        startTime : '2016-3-12 12:12',
-        startTime : '2016-3-12 14:12'
-      })
+      ticket: 'INK-3051',
+      startTime : '2016-3-12 12:12',
+      endTime : '2016-3-12 14:12'
     })
   })
 }), action) {
   const { type, content } = action;
-  return state;
+
+  switch (type) {
+    case ADD_BUG_BASH:
+      var id = parseInt(Math.random() * 1000);
+      var copy = state.set('ids', state.get('ids').push(id));
+      copy = copy.setIn(['infos', id.toString()], content);
+      return copy;
+  
+    default:
+      return state;
+  }
 }

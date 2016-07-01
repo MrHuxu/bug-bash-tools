@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import MenuBar from './MenuBar';
+import BugBashList from './BugBashList';
 import Dashboard from './Dashboard';
 
 class App extends Component {
@@ -8,6 +9,7 @@ class App extends Component {
     return (
       <div>
         <MenuBar />
+        <BugBashList />
         <Dashboard />
       </div>
     );

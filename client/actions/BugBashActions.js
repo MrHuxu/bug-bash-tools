@@ -1,5 +1,6 @@
 export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
+  console.log(data);
   return {
     type    : ADD_BUG_BASH,
     content : data
