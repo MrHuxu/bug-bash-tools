@@ -1,9 +1,11 @@
 import thunkMiddleware from 'redux-thunk';
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import { person } from './reducers/PersonReducer';
+import { bugBash } from './reducers/BugBashReducer';
 
 const rootReducer = combineReducers({
-  person
+  person,
+  bugBash
 });
 
 export const rootStore = compose(

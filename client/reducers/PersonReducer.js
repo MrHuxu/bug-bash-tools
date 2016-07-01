@@ -1,6 +1,3 @@
-import {
-  CHANGE_SCORE
-} from '../actions/PersonActions';
 import Immutable from 'immutable';
 
 export function person (state = Immutable.Map({
@@ -37,12 +34,5 @@ export function person (state = Immutable.Map({
 }), action) {
   const { type, content } = action;
 
-  switch (type) {
-    case CHANGE_SCORE:
-      var copy = state.setIn(['infos', content.id.toString(), 'scores', content.level], content.value);
-      return copy;
-
-    default:
-      return state;
-  }
+  return state;
 }
