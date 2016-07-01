@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
@@ -15,6 +16,12 @@ const styles = {
 };
 
 class BugBashList extends Component {
+  static propTypes = {
+    style : React.PropTypes.object,
+    ids   : ImmutablePropTypes.listOf(React.PropTypes.number).isRequired,
+    infos : ImmutablePropTypes.mapOf(ImmutablePropTypes.mapOf(React.PropTypes.string)).isRequired
+  };
+
   state = {
     open : false,
     data : {
@@ -44,7 +51,7 @@ class BugBashList extends Component {
     const rows = ids.toJS().map(id => {
       var info = infos.get(id.toString()).toJS();
       return (
-        <TableRow>
+        <TableRow key = {`bug-bash-${id}`}>
           <TableRowColumn>{info.name}</TableRowColumn>
           <TableRowColumn>{info.ticket}</TableRowColumn>
           <TableRowColumn>{info.startTime}</TableRowColumn>
@@ -52,7 +59,7 @@ class BugBashList extends Component {
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton
-                onClick = {this.handleOpen.bind(this, id, info)}
+                onClick = {this.handleOpen.bind(this, id.toString(), info)}
               >
                 <EditorModeEdit color = {blue500} />
               </IconButton>

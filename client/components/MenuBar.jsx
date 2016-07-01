@@ -4,16 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import EditBugBash from './EditBugBash';
 
-const styles = {
-  btnContainer : {
-    padding : '10px 0 0 0'
-  },
-
-  menubarBtn : {
-    margin : '0 15px 0 15px'
-  }
-};
-
 class MenuBar extends Component {
   state = {
     open : false

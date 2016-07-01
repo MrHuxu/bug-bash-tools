@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import TextField from 'material-ui/TextField';
@@ -18,6 +17,16 @@ const styles = {
 };
 
 class EditBugBash extends Component {
+  static propTypes = {
+    dispatch    : React.PropTypes.func.isRequired,
+    handleClose : React.PropTypes.func.isRequired,
+    open        : React.PropTypes.bool.isRequired,
+    data        : React.PropTypes.shape({
+      id   : React.PropTypes.string.isRequired,
+      info : React.PropTypes.object.isRequired
+    })
+  };
+
   state = {
     name      : '',
     ticket    : '',

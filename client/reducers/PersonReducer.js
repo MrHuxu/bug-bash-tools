@@ -32,7 +32,5 @@ export function person (state = Immutable.Map({
     })
   })
 }), action) {
-  const { type, content } = action;
-
   return state;
 }

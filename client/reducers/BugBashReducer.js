@@ -1,6 +1,5 @@
 import {
-  ADD_BUG_BASH,
-  DEL_BUG_BASH
+  ADD_BUG_BASH
 } from '../actions/BugBashActions';
 import Immutable from 'immutable';
 

@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 class Dashboard extends Component {
+  static propTypes = {
+    style : React.PropTypes.object,
+    ids   : ImmutablePropTypes.listOf(React.PropTypes.number).isRequired,
+    infos : ImmutablePropTypes.mapOf(ImmutablePropTypes.contains({
+      name   : React.PropTypes.string.isRequired,
+      scores : ImmutablePropTypes.mapOf(React.PropTypes.number).isRequired
+    })).isRequired
+  };
+
   render () {
     const { ids, infos } = this.props;
     const rows = ids.toJS().map(id => {
       var info = infos.get(id.toString()).toJS();
       return (
-        <TableRow>
+        <TableRow key = {`person-${id}`}>
           <TableRowColumn>{info.name}</TableRowColumn>
           <TableRowColumn>{info.scores.p1}</TableRowColumn>
           <TableRowColumn>{info.scores.p2}</TableRowColumn>
