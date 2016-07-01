@@ -24,5 +24,5 @@ reactDom.render(
       <Router routes = {routes} history = {browserHistory} />
     </Provider>
   </MuiThemeProvider>,
-  document.getElementById('blog')
+  document.getElementById('bug-bash-tools')
 );

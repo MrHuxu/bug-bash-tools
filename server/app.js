@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
 app.get('*', (req, res) => {
-  res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Life of xhu' });
+  res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Bug Bash Tools' });
 });
 
 // catch 404 and forward to error handler
