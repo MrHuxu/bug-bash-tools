@@ -1,0 +1,4 @@
+{
+  "ignore": [".git", "public", "ui"],
+  "verbose": true
+}
