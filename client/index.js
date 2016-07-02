@@ -5,8 +5,9 @@ import $ from 'jquery';
 window.jQuery = $; // Assure it's available globally.
 
 import React from 'react';
-import reactDom from 'react-dom';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { StyleRoot } from 'radium';
 import { rootStore } from './store';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -16,10 +17,12 @@ injectTapEventPlugin();
 
 import App from './components/App';
 
-reactDom.render(
+render(
   <MuiThemeProvider muiTheme = {getMuiTheme()}>
     <Provider store = {rootStore}>
-      <App />
+      <StyleRoot>
+        <App />
+      </StyleRoot>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('bug-bash-tools')
