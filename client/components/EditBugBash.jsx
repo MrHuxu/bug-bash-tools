@@ -51,7 +51,7 @@ class EditBugBash extends Component {
     const actions = [
       <FlatButton
         label = 'Cancel'
-        primary
+        secondary
         keyboardFocused
         onTouchTap = {this.props.handleClose}
       />,
@@ -66,7 +66,7 @@ class EditBugBash extends Component {
     return (
       <div>
         <Dialog
-          title = 'Dialog With Date Picker'
+          title = 'Add or Update a Bug Bash'
           actions = {actions}
           modal = {false}
           open = {this.props.open}

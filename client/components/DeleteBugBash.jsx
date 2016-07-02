@@ -27,13 +27,13 @@ class DeleteBugBash extends Component {
     const actions = [
       <FlatButton
         label = 'Cancel'
-        primary
-        keyboardFocused
+        secondary
         onTouchTap = {this.props.handleClose}
       />,
       <FlatButton
         label = 'Delete'
-        secondary
+        primary
+        keyboardFocused
         onTouchTap = {this.handleConfirmDelete}
       />
     ];

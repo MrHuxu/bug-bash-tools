@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import RaisedButton from 'material-ui/RaisedButton';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import EditBugBash from './EditBugBash';
 
@@ -23,22 +24,20 @@ class MenuBar extends Component {
 
   render () {
     return (
-      <Toolbar>
-        <ToolbarGroup>
-          <ToolbarTitle text = 'Bug Bash Tool' />
-        </ToolbarGroup>
-        <ToolbarGroup float = 'right'>
-          <RaisedButton
-            primary
-            label = 'Add Bug Bash'
-            onTouchTap = {this.handleOpen}
-          />
-          <EditBugBash
-            open = {this.state.open}
-            handleClose = {this.handleClose}
-          />
-        </ToolbarGroup>
-      </Toolbar>
+      <div>
+        <AppBar
+          title = 'Bug Bash Tool'
+          iconElementLeft = {
+            <IconButton onTouchTap = {this.handleOpen}>
+              <ContentAdd />
+            </IconButton>
+          }
+        />
+        <EditBugBash
+          open = {this.state.open}
+          handleClose = {this.handleClose}
+        />
+      </div>
     );
   }
 }

@@ -89,7 +89,11 @@ class BugBashList extends Component {
 
     return (
       <div style = {this.props.style}>
-        <Table>
+        <Table
+          selectable
+          multiSelectable
+          enableSelectAll
+        >
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>

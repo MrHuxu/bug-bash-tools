@@ -31,7 +31,7 @@ class Dashboard extends Component {
 
     return (
       <div style = {this.props.style}>
-        <Table>
+        <Table selectable = {false}>
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
