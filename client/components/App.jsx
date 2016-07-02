@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Radium, { Style } from 'radium';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
 import BugBashList from './BugBashList';
@@ -22,6 +23,7 @@ const styles = {
     verticalAlign                : 'top',
     display                      : 'inline-block',
     margin                       : '20px 0 0 0',
+    borderTop                    : `2px solid ${yellow900}`,
     '@media (max-width: 1200px)' : {
       width : '100%'
     },
@@ -34,6 +36,7 @@ const styles = {
   dashboard : {
     verticalAlign                : 'top',
     display                      : 'inline-block',
+    borderTop                    : `2px solid ${blueGrey400}`,
     '@media (max-width: 1200px)' : {
       margin : '20px 0 0 0',
       width  : '100%'
