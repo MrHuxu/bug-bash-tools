@@ -6,21 +6,20 @@ window.jQuery = $; // Assure it's available globally.
 
 import React from 'react';
 import reactDom from 'react-dom';
-import { browserHistory, Router } from 'react-router';
 import { Provider } from 'react-redux';
 import { rootStore } from './store';
-import routes from './routes/routes';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+
+import App from './components/App';
 
 reactDom.render(
   <MuiThemeProvider muiTheme = {getMuiTheme()}>
     <Provider store = {rootStore}>
-      <Router routes = {routes} history = {browserHistory} />
+      <App />
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('bug-bash-tools')
