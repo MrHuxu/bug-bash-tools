@@ -1,5 +1,7 @@
 import {
-  ADD_BUG_BASH
+  ADD_BUG_BASH,
+  UPD_BUG_BASH,
+  DEL_BUG_BASH
 } from '../actions/BugBashActions';
 import Immutable from 'immutable';
 
@@ -19,9 +21,20 @@ export function bugBash (state = Immutable.Map({
   switch (type) {
     case ADD_BUG_BASH:
       var id = parseInt(Math.random() * 1000);
-      var copy = state.set('ids', state.get('ids').push(id));
-      copy = copy.setIn(['infos', id.toString()], content);
-      return copy;
+      state = state.set('ids', state.get('ids').push(id))
+                   .setIn(['infos', id.toString()], content);
+      return state;
+
+    case DEL_BUG_BASH:
+      var ids = state.get('ids');
+      var infos = state.get('infos');
+      state = state.set('ids', ids.delete(ids.indexOf(content)))
+                   .set('infos', infos.delete(content.toString()));
+      return state;
+
+    case UPD_BUG_BASH:
+      state = state.setIn(['infos', content.id.toString()], content.info);
+      return state;
 
     default:
       return state;

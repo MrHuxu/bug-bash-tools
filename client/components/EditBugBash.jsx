@@ -7,7 +7,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import TextField from 'material-ui/TextField';
 
-import { addBugBash } from '../actions/BugBashActions';
+import { addBugBash, updBugBash } from '../actions/BugBashActions';
 
 const styles = {
   halfPanel : {
@@ -22,39 +22,39 @@ class EditBugBash extends Component {
     handleClose : React.PropTypes.func.isRequired,
     open        : React.PropTypes.bool.isRequired,
     data        : React.PropTypes.shape({
-      id   : React.PropTypes.string.isRequired,
-      info : React.PropTypes.object.isRequired
+      id   : React.PropTypes.number,
+      info : React.PropTypes.object
     })
   };
 
-  state = {
-    name      : '',
-    ticket    : '',
-    startDate : '',
-    startTime : '',
-    endDate   : '',
-    endTime   : ''
-  };
-
   handleSubmit = () => {
-    if (this.state.name && this.state.name.length) {
-      this.props.dispatch(addBugBash(Immutable.Map({
-        name      : this.state.name,
-        ticket    : this.state.ticket,
+    const { dispatch, data } = this.props;
+
+    const { name, ticket } = this.refs;
+    if (name.getValue().length) {
+      const info = Immutable.Map({
+        name      : name.getValue(),
+        ticket    : ticket.getValue(),
         startTime : '',
         endTime   : ''
-      })));
+      });
+      dispatch((data && data.id) ? updBugBash({
+        id   : data.id,
+        info : info
+      }) : addBugBash(info));
     }
     this.props.handleClose();
   };
 
-  handleUpdate (field) {
-    this.state[field] = arguments[2];
-  }
-
   render () {
     const { data } = this.props;
     const actions = [
+      <FlatButton
+        label = 'Cancel'
+        primary
+        keyboardFocused
+        onTouchTap = {this.props.handleClose}
+      />,
       <FlatButton
         label = 'Ok'
         primary
@@ -76,13 +76,13 @@ class EditBugBash extends Component {
             Name<br />
             <TextField
               id = 'name'
-              onChange = {this.handleUpdate.bind(this, 'name')}
+              ref = 'name'
               defaultValue = {data ? data.info.name : ''}
             /><br />
             Main Ticket<br />
             <TextField
               id = 'ticket'
-              onChange = {this.handleUpdate.bind(this, 'ticket')}
+              ref = 'ticket'
               defaultValue = {data ? data.info.ticket : ''}
             /><br />
           </div>
@@ -90,31 +90,31 @@ class EditBugBash extends Component {
             From<br />
             <div style = {styles.halfPanel}>
               <DatePicker
+                ref = 'startDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
-                onChange = {this.handleUpdate.bind(this, 'startDate')}
               />
             </div>
             <div style = {styles.halfPanel}>
               <TimePicker
+                ref = 'startTime'
                 format = '24hr'
                 hintText = 'Start Time'
-                onChange = {this.handleUpdate.bind(this, 'startTime')}
               />
             </div>
             To<br />
             <div style = {styles.halfPanel}>
               <DatePicker
+                ref = 'endDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
-                onChange = {this.handleUpdate.bind(this, 'endDate')}
               />
             </div>
             <div style = {styles.halfPanel}>
               <TimePicker
+                ref = 'endTime'
                 format = '24hr'
                 hintText = 'End Time'
-                onChange = {this.handleUpdate.bind(this, 'endTime')}
               />
             </div>
           </div>

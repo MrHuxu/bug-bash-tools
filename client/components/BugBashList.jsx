@@ -8,6 +8,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import { red500, blue500 } from 'material-ui/styles/colors';
 
 import EditBugBash from './EditBugBash';
+import DeleteBugBash from './DeleteBugBash';
 
 const styles = {
   btnWrapper : {
@@ -23,17 +24,28 @@ class BugBashList extends Component {
   };
 
   state = {
-    open : false,
-    data : {
-      id   : '',
+    openEdit   : false,
+    openDelete : false,
+    data       : {
+      id   : 0,
       info : {}
     }
   };
 
-  handleOpen = (id, info) => {
+  handleOpenEdit = (id, info) => {
     this.setState({
-      open : true,
-      data : {
+      openEdit : true,
+      data     : {
+        id   : id,
+        info : info
+      }
+    });
+  };
+
+  handleOpenDelete = (id, info) => {
+    this.setState({
+      openDelete : true,
+      data       : {
         id   : id,
         info : info
       }
@@ -42,7 +54,8 @@ class BugBashList extends Component {
 
   handleClose = () => {
     this.setState({
-      open : false
+      openEdit   : false,
+      openDelete : false
     });
   };
 
@@ -59,11 +72,13 @@ class BugBashList extends Component {
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton
-                onClick = {this.handleOpen.bind(this, id.toString(), info)}
+                onClick = {this.handleOpenEdit.bind(this, id, info)}
               >
                 <EditorModeEdit color = {blue500} />
               </IconButton>
-              <IconButton>
+              <IconButton
+                onClick = {this.handleOpenDelete.bind(this, id, info)}
+              >
                 <ActionDelete color = {red500} />
               </IconButton>
             </div>
@@ -89,7 +104,12 @@ class BugBashList extends Component {
           </TableBody>
         </Table>
         <EditBugBash
-          open = {this.state.open}
+          open = {this.state.openEdit}
+          data = {this.state.data}
+          handleClose = {this.handleClose}
+        />
+        <DeleteBugBash
+          open = {this.state.openDelete}
           data = {this.state.data}
           handleClose = {this.handleClose}
         />

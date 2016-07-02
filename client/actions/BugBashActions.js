@@ -7,10 +7,19 @@ export function addBugBash (data) {
   };
 }
 
+export const UPD_BUG_BASH = 'UPD_BUG_BASH';
+export function updBugBash (data) {
+  console.log(data);
+  return {
+    type    : UPD_BUG_BASH,
+    content : data
+  };
+}
+
 export const DEL_BUG_BASH = 'DEL_BUG_BASH';
-export function delBugBash (data) {
+export function delBugBash (id) {
   return {
     type    : DEL_BUG_BASH,
-    content : data
+    content : id
   };
 }
