@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
-  res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Life of xhu' });
+  res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Bug Bash Tool' });
 });
 
 export default app;
