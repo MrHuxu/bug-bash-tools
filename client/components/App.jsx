@@ -11,7 +11,7 @@ import Dashboard from './Dashboard';
 const styles = {
   base : {
     'html, body, .full-height' : {
-      margin: 0,
+      margin : 0,
       height : '100%'
     },
 
@@ -21,27 +21,27 @@ const styles = {
     }
   },
 
-  container: {
+  container : {
     '@media (min-width: 1201px)' : {
-        padding: '1%',
-        height: '90%',
-        overflowY: 'hidden'
-     }
+      padding   : '1%',
+      height    : '90%',
+      overflowY : 'hidden'
+    }
   },
 
   leftPanel : {
     verticalAlign                : 'top',
     display                      : 'inline-block',
     margin                       : '20px 0 0 0',
+    padding                      : '0 0.1% 0.1% 0.1%',
     '@media (max-width: 1200px)' : {
       width : '100%'
     },
 
     '@media (min-width: 1201px)' : {
-      width : '48%',
-      height : '100%',
-      height : '90%',
-      overflowY: 'auto'
+      width     : '47.5%',
+      height    : '90%',
+      overflowY : 'auto'
     }
   },
 
@@ -57,18 +57,22 @@ const styles = {
   rightPanel : {
     verticalAlign                : 'top',
     display                      : 'inline-block',
-    borderTop                    : `2px solid ${blueGrey400}`,
+    padding                      : '0 0.1% 0.1% 0.1%',
     '@media (max-width: 1200px)' : {
       margin : '20px 0 0 0',
       width  : '100%'
     },
 
     '@media (min-width: 1201px)' : {
-      margin : '20px 0 0 1%',
-      width  : '51%',
-      height : '90%',
-      overflowY: 'auto'
+      margin    : '20px 0 0 1%',
+      width     : '51%',
+      height    : '90%',
+      overflowY : 'auto'
     }
+  },
+
+  memberList : {
+    borderTop : `2px solid ${blueGrey400}`
   }
 };
 
@@ -102,7 +106,7 @@ class App extends Component {
         </div>
         <div style = {styles.rightPanel}>
 
-          <Card>
+          <Card style = {styles.memberList}>
             <CardHeader
               title = 'Member List'
             />
