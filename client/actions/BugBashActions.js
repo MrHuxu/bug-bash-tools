@@ -1,7 +1,18 @@
 import $ from 'jquery';
 
+var fetchAllBugBash = () {
+  $.get('/bug-bash/', (a, b, c) => {
+    console.log(a, b, c);
+  });
+}
+
 export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
+  return function (dispatch) {
+    $.post('/bug-bash/new', data, (a, b, c) => {
+      dispatch(fetchAllBugBash());
+    })
+  }
   return {
     type    : ADD_BUG_BASH,
     content : data

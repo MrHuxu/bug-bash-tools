@@ -3,6 +3,7 @@ import path from 'path';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 
+import bugBash from './routes/bug-bash';
 import { fetchBugBashData } from './lib/fetch-jira';
 
 var app = express();
@@ -18,10 +19,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.post('/bugBash', (req, res) => {
-  fetchBugBashData(req.body).then((result) => console.log(result));
-  res.send('hehe');
-});
+app.use('/bug-bash', bugBash);
 
 app.get('*', (req, res) => {
   res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Bug Bash Tool' });
