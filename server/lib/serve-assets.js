@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('../webpack.config.dev');
+var webpackConfig = require('../../webpack.config.dev');
 
 var compiler = webpack(webpackConfig);
 var serveAssets = new WebpackDevServer(compiler, {

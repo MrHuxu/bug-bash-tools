@@ -30,13 +30,17 @@ class EditBugBash extends Component {
   handleSubmit = () => {
     const { dispatch, data } = this.props;
 
-    const { name, ticket } = this.refs;
+    const { name, ticket, startDate, startTime, endDate, endTime } = this.refs;
     if (name.getValue().length) {
+      const startDateObj = startDate.getDate();
+      const startTimeObj = startTime.getTime();
+      const endDateObj = endDate.getDate();
+      const endTimeObj = endTime.getTime();
       const info = Immutable.Map({
         name      : name.getValue(),
         ticket    : ticket.getValue(),
-        startTime : '',
-        endTime   : ''
+        startTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
+        endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       });
       dispatch((data && data.id) ? updBugBash({
         id   : data.id,
@@ -93,6 +97,7 @@ class EditBugBash extends Component {
                 ref = 'startDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
+                defaultDate = {data ? new Date(data.info.startTime) : new Date()}
               />
             </div>
             <div style = {styles.halfPanel}>
@@ -100,6 +105,7 @@ class EditBugBash extends Component {
                 ref = 'startTime'
                 format = '24hr'
                 hintText = 'Start Time'
+                defaultTime = {data ? new Date(data.info.startTime) : new Date()}
               />
             </div>
             To<br />
@@ -108,6 +114,7 @@ class EditBugBash extends Component {
                 ref = 'endDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
+                defaultDate = {data ? new Date(data.info.endTime) : new Date()}
               />
             </div>
             <div style = {styles.halfPanel}>
@@ -115,6 +122,7 @@ class EditBugBash extends Component {
                 ref = 'endTime'
                 format = '24hr'
                 hintText = 'End Time'
+                defaultTime = {data ? new Date(data.info.endTime) : new Date()}
               />
             </div>
           </div>

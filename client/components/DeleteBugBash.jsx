@@ -18,7 +18,7 @@ class DeleteBugBash extends Component {
 
   handleConfirmDelete = () => {
     const { dispatch, data } = this.props;
-    dispatch(delBugBash(data.id));
+    dispatch(delBugBash(data));
     this.props.handleClose();
   };
 

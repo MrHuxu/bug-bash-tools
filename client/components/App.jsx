@@ -66,6 +66,7 @@ class App extends Component {
         <Style rules = {styles.base} />
         <MenuBar />
         <div style = {styles.leftPanel}>
+
           <Card style = {styles.summary}>
             <CardHeader
               title = 'Summary'
@@ -74,6 +75,7 @@ class App extends Component {
               <Summary />
             </CardText>
           </Card>
+
           <Card style = {styles.bugBashList}>
             <CardHeader
               title = 'Bug Bash List'
@@ -82,8 +84,10 @@ class App extends Component {
               <BugBashList />
             </CardText>
           </Card>
+
         </div>
         <div style = {styles.rightPanel}>
+
           <Card>
             <CardHeader
               title = 'Member List'
@@ -92,6 +96,7 @@ class App extends Component {
               <Dashboard />
             </CardText>
           </Card>
+
         </div>
       </div>
     );
