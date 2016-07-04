@@ -1,5 +1,5 @@
 const Datastore = require('nedb');
-module.exports = new Datastore({
-  filename: './bug-bash-db',
-  autoload: true
+export default new Datastore({
+  filename : './bug-bashes',
+  autoload : true
 });
