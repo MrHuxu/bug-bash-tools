@@ -1,15 +1,15 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
 
-var db = require('../lib/bug-bash-db');
+import db from '../lib/bug-bash-db';
 
 router.get('/', (req, res) => {
   db.find({}, (err, docs) => {
     res.send({
-      records: docs
+      records : docs
     });
   });
-})
+});
 
 router.post('/new', (req, res) => {
   db.insert(req.body, (err, newDocs) => {
@@ -18,16 +18,15 @@ router.post('/new', (req, res) => {
 });
 
 router.put('/update', (req, res) => {
-  db.update({ _id : req.body.info._id }, () => {
+  db.update({ _id: req.body._id }, req.body.info, () => {
     res.send('updated!');
   });
 });
 
 router.delete('/destroy', (req, res) => {
-  console.log(req.body._id)
-  db.remove({ _id : req.body._id }, () => {
+  db.remove({ _id: req.body._id }, () => {
     res.send('removed!');
   });
 });
 
-module.exports = router;
+export default router;

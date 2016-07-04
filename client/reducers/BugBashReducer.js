@@ -11,13 +11,13 @@ export function bugBash (state = {
 
   switch (type) {
     case REFRESH_BUG_BASH:
-      var ids = content.map(record => record._id);
-      var infos = {};
-      content.forEach(record => infos[record._id] = record);
       return {
-        ids: ids,
-        infos: infos
-      }
+        ids   : content.map(record => record._id),
+        infos : content.reduce((prev, cur, index, arr) => {
+          prev[arr[index]._id] = arr[index];
+          return prev;
+        }, {})
+      };
 
     default:
       return state;

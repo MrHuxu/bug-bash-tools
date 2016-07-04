@@ -1,10 +1,10 @@
 import thunkMiddleware from 'redux-thunk';
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
-import { person } from './reducers/PersonReducer';
+import { member } from './reducers/MemberReducer';
 import { bugBash } from './reducers/BugBashReducer';
 
 const rootReducer = combineReducers({
-  person,
+  member,
   bugBash
 });
 

@@ -42,8 +42,8 @@ class EditBugBash extends Component {
         startTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
         endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       };
-      dispatch((data && data.id) ? updBugBash({
-        _id   : data._id,
+      dispatch((data && data._id) ? updBugBash({
+        _id  : data._id,
         info : info
       }) : addBugBash(info));
     }

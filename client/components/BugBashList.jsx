@@ -10,7 +10,7 @@ import { red500, blue500 } from 'material-ui/styles/colors';
 import EditBugBash from './EditBugBash';
 import DeleteBugBash from './DeleteBugBash';
 
-import { fetchAllBugBash } from '../actions/BugBashActions';
+import { fetchAllBugBash, fetchAllMember } from '../actions/BugBashActions';
 
 const styles = {
   btnWrapper : {
@@ -29,26 +29,34 @@ class BugBashList extends Component {
     openEdit   : false,
     openDelete : false,
     data       : {
-      id   : 0,
+      _id  : 0,
       info : {}
     }
   };
 
-  handleOpenEdit = (id, info) => {
+  componentDidMount () {
+    this.props.dispatch(fetchAllBugBash());
+  }
+
+  componentDidUpdate () {
+    this.props.dispatch(fetchAllMember());
+  }
+
+  handleOpenEdit = (_id, info) => {
     this.setState({
       openEdit : true,
       data     : {
-        id   : id,
+        _id  : _id,
         info : info
       }
     });
   };
 
-  handleOpenDelete = (id, info) => {
+  handleOpenDelete = (_id, info) => {
     this.setState({
       openDelete : true,
       data       : {
-        id   : id,
+        _id  : _id,
         info : info
       }
     });
@@ -61,16 +69,12 @@ class BugBashList extends Component {
     });
   };
 
-  componentDidMount () {
-    this.props.dispatch(fetchAllBugBash());
-  }
-
   render () {
     const { ids, infos } = this.props;
-    const rows = ids.map(id => {
-      var info = infos[id];
+    const rows = ids.map(_id => {
+      var info = infos[_id];
       return (
-        <TableRow key = {`bug-bash-${id}`}>
+        <TableRow key = {`bug-bash-${_id}`}>
           <TableRowColumn>{info.name}</TableRowColumn>
           <TableRowColumn>{info.ticket}</TableRowColumn>
           <TableRowColumn>{info.startTime}</TableRowColumn>
@@ -78,12 +82,12 @@ class BugBashList extends Component {
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton
-                onClick = {this.handleOpenEdit.bind(this, id, info)}
+                onClick = {this.handleOpenEdit.bind(this, _id, info)}
               >
                 <EditorModeEdit color = {blue500} />
               </IconButton>
               <IconButton
-                onClick = {this.handleOpenDelete.bind(this, id, info)}
+                onClick = {this.handleOpenDelete.bind(this, _id, info)}
               >
                 <ActionDelete color = {red500} />
               </IconButton>

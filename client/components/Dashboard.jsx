@@ -8,23 +8,32 @@ class Dashboard extends Component {
     style : React.PropTypes.object,
     ids   : ImmutablePropTypes.listOf(React.PropTypes.number).isRequired,
     infos : ImmutablePropTypes.mapOf(ImmutablePropTypes.contains({
-      name   : React.PropTypes.string.isRequired,
-      scores : ImmutablePropTypes.mapOf(React.PropTypes.number).isRequired
+      name  : React.PropTypes.string.isRequired,
+      infos : ImmutablePropTypes.mapOf(React.PropTypes.number).isRequired
     })).isRequired
   };
 
+  sortedNames = () => {
+    const { names, infos } = this.props;
+    names.sort((name1, name2) => {
+      return infos[name1].score > infos[name2].score ? -1 : 1;
+    });
+
+    return names;
+  };
+
   render () {
-    const { ids, infos } = this.props;
-    const rows = ids.toJS().map(id => {
-      var info = infos.get(id.toString()).toJS();
+    const { names, infos } = this.props;
+    const rows = this.sortedNames().map(name => {
+      var info = infos[name];
       return (
-        <TableRow key = {`person-${id}`}>
-          <TableRowColumn>{info.name}</TableRowColumn>
-          <TableRowColumn>{info.scores.p1}</TableRowColumn>
-          <TableRowColumn>{info.scores.p2}</TableRowColumn>
-          <TableRowColumn>{info.scores.p3}</TableRowColumn>
-          <TableRowColumn>{info.scores.p4}</TableRowColumn>
-          <TableRowColumn>{info.scores.p1 * 3 + info.scores.p2 * 2 + info.scores.p3 * 1 + info.scores.p4 * 0.5}</TableRowColumn>
+        <TableRow key = {`person-${name}`}>
+          <TableRowColumn>{name}</TableRowColumn>
+          <TableRowColumn>{info[1]}</TableRowColumn>
+          <TableRowColumn>{info[2]}</TableRowColumn>
+          <TableRowColumn>{info[3]}</TableRowColumn>
+          <TableRowColumn>{info[4]}</TableRowColumn>
+          <TableRowColumn>{info.score}</TableRowColumn>
         </TableRow>
       );
     });
@@ -53,8 +62,8 @@ class Dashboard extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    ids   : state.person.get('ids'),
-    infos : state.person.get('infos')
+    names : state.member.names,
+    infos : state.member.infos
   };
 };
 

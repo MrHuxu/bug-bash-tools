@@ -4,7 +4,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 
 import bugBash from './routes/bug-bash';
-import { fetchBugBashData } from './lib/fetch-jira';
+import member from './routes/member';
 
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/bug-bash', bugBash);
+app.use('/member', member);
 
 app.get('*', (req, res) => {
   res.render(path.resolve(__dirname, 'views', 'index.ejs'), { title: 'Bug Bash Tool' });

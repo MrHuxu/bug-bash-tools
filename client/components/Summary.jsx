@@ -8,6 +8,15 @@ class Summary extends Component {
   };
 
   render () {
+    const { names, infos } = this.props;
+    var sum = {1: 0, 2: 0, 3: 0, 4: 0};
+    names.forEach(name => {
+      sum[1] += infos[name][1];
+      sum[2] += infos[name][2];
+      sum[3] += infos[name][3];
+      sum[4] += infos[name][4];
+    });
+
     return (
       <div style = {this.props.style}>
         <Table selectable = {false}>
@@ -21,10 +30,10 @@ class Summary extends Component {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableRowColumn>0</TableRowColumn>
-              <TableRowColumn>0</TableRowColumn>
-              <TableRowColumn>0</TableRowColumn>
-              <TableRowColumn>0</TableRowColumn>
+              <TableRowColumn>{sum[1]}</TableRowColumn>
+              <TableRowColumn>{sum[2]}</TableRowColumn>
+              <TableRowColumn>{sum[3]}</TableRowColumn>
+              <TableRowColumn>{sum[4]}</TableRowColumn>
             </TableRow>
           </TableBody>
         </Table>
@@ -33,4 +42,11 @@ class Summary extends Component {
   }
 }
 
-export default connect()(Summary);
+var mapStateToProps = (state) => {
+  return {
+    names : state.member.names,
+    infos : state.member.infos
+  };
+};
+
+export default connect(mapStateToProps)(Summary);
