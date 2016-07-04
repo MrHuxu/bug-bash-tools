@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Radium, { Style } from 'radium';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { yellow900, blueGrey400 } from 'material-ui/styles/colors';
+import { pink500, yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
+import Summary from './Summary';
 import BugBashList from './BugBashList';
 import Dashboard from './Dashboard';
 
@@ -19,11 +20,10 @@ const styles = {
     }
   },
 
-  bugBashList : {
+  leftPanel : {
     verticalAlign                : 'top',
     display                      : 'inline-block',
     margin                       : '20px 0 0 0',
-    borderTop                    : `2px solid ${yellow900}`,
     '@media (max-width: 1200px)' : {
       width : '100%'
     },
@@ -33,7 +33,16 @@ const styles = {
     }
   },
 
-  dashboard : {
+  summary : {
+    borderTop : `2px solid ${pink500}`
+  },
+
+  bugBashList : {
+    borderTop : `2px solid ${yellow900}`,
+    margin    : '20px 0 0 0'
+  },
+
+  rightPanel : {
     verticalAlign                : 'top',
     display                      : 'inline-block',
     borderTop                    : `2px solid ${blueGrey400}`,
@@ -56,8 +65,16 @@ class App extends Component {
       <div>
         <Style rules = {styles.base} />
         <MenuBar />
-        <div style = {styles.bugBashList}>
-          <Card>
+        <div style = {styles.leftPanel}>
+          <Card style = {styles.summary}>
+            <CardHeader
+              title = 'Summary'
+            />
+            <CardText>
+              <Summary />
+            </CardText>
+          </Card>
+          <Card style = {styles.bugBashList}>
             <CardHeader
               title = 'Bug Bash List'
             />
@@ -66,10 +83,10 @@ class App extends Component {
             </CardText>
           </Card>
         </div>
-        <div style = {styles.dashboard}>
+        <div style = {styles.rightPanel}>
           <Card>
             <CardHeader
-              title = 'Dashboard'
+              title = 'Member List'
             />
             <CardText>
               <Dashboard />
