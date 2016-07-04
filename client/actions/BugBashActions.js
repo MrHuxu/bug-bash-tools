@@ -33,6 +33,7 @@ export function fetchAllBugBash () {
   return (dispatch) => {
     $.get('/bug-bash/', (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
+      dispatch(fetchAllMember());
     });
   };
 }

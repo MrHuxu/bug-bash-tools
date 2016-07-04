@@ -34,8 +34,13 @@ class BugBashList extends Component {
     openEdit   : false,
     openDelete : false,
     data       : {
-      _id  : 0,
-      info : {}
+      _id  : '',
+      info : {
+        name      : '',
+        ticket    : '',
+        startTime : '',
+        endTime   : ''
+      }
     }
   };
 
@@ -43,11 +48,8 @@ class BugBashList extends Component {
     this.props.dispatch(fetchAllBugBash());
   }
 
-  componentDidUpdate () {
-    this.props.dispatch(fetchAllMember());
-  }
-
-  handleOpenEdit = (_id, info) => {
+  handleOpenEdit = (_id, info, e) => {
+    e.stopPropagation();
     this.setState({
       openEdit : true,
       data     : {
@@ -57,7 +59,8 @@ class BugBashList extends Component {
     });
   };
 
-  handleOpenDelete = (_id, info) => {
+  handleOpenDelete = (_id, info, e) => {
+    e.stopPropagation();
     this.setState({
       openDelete : true,
       data       : {
@@ -77,7 +80,7 @@ class BugBashList extends Component {
   handleSelect = (rows) => {
     const { ids, dispatch } = this.props;
 
-    if (typeof rows === 'string') {
+    if ('string' === typeof rows) {
       dispatch(fetchAllMember());
     } else {
       dispatch(fetchAllMember(rows.map(row => ids[row])));

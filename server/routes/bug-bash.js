@@ -4,7 +4,7 @@ var router = express.Router();
 import db from '../lib/bug-bash-db';
 
 router.get('/', (req, res) => {
-  db.find({}, (err, docs) => {
+  db.find({}).sort({ startTime: -1 }).exec((err, docs) => {
     res.send({
       records : err ? [] : docs
     });
