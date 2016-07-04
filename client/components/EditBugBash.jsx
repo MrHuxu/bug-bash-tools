@@ -36,14 +36,14 @@ class EditBugBash extends Component {
       const startTimeObj = startTime.getTime();
       const endDateObj = endDate.getDate();
       const endTimeObj = endTime.getTime();
-      const info = Immutable.Map({
+      const info = {
         name      : name.getValue(),
         ticket    : ticket.getValue(),
         startTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
         endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
-      });
+      };
       dispatch((data && data.id) ? updBugBash({
-        id   : data.id,
+        _id   : data._id,
         info : info
       }) : addBugBash(info));
     }

@@ -10,6 +10,8 @@ import { red500, blue500 } from 'material-ui/styles/colors';
 import EditBugBash from './EditBugBash';
 import DeleteBugBash from './DeleteBugBash';
 
+import { fetchAllBugBash } from '../actions/BugBashActions';
+
 const styles = {
   btnWrapper : {
     display : 'flex'
@@ -59,10 +61,14 @@ class BugBashList extends Component {
     });
   };
 
+  componentDidMount () {
+    this.props.dispatch(fetchAllBugBash());
+  }
+
   render () {
     const { ids, infos } = this.props;
-    const rows = ids.toJS().map(id => {
-      var info = infos.get(id.toString()).toJS();
+    const rows = ids.map(id => {
+      var info = infos[id];
       return (
         <TableRow key = {`bug-bash-${id}`}>
           <TableRowColumn>{info.name}</TableRowColumn>
@@ -124,8 +130,8 @@ class BugBashList extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    ids   : state.bugBash.get('ids'),
-    infos : state.bugBash.get('infos')
+    ids   : state.bugBash.ids,
+    infos : state.bugBash.infos
   };
 };
 

@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/new', (req, res) => {
-  db.insert(req.body.info, (err, newDocs) => {
+  db.insert(req.body, (err, newDocs) => {
     res.send('created!');
   });
 });
@@ -24,7 +24,8 @@ router.put('/update', (req, res) => {
 });
 
 router.delete('/destroy', (req, res) => {
-  db.remove({ _id : req.body.info._id }, () => {
+  console.log(req.body._id)
+  db.remove({ _id : req.body._id }, () => {
     res.send('removed!');
   });
 });
