@@ -74,12 +74,24 @@ class BugBashList extends Component {
     });
   };
 
+  handleSelect = (rows) => {
+    const { ids, dispatch } = this.props;
+
+    if (typeof rows === 'string') {
+      dispatch(fetchAllMember());
+    } else {
+      dispatch(fetchAllMember(rows.map(row => ids[row])));
+    }
+  };
+
   render () {
     const { ids, infos } = this.props;
     const rows = ids.map(_id => {
       var info = infos[_id];
       return (
-        <TableRow key = {`bug-bash-${_id}`}>
+        <TableRow
+          key = {`bug-bash-${_id}`}
+        >
           <TableRowColumn>{info.name}</TableRowColumn>
           <TableRowColumn>{info.ticket}</TableRowColumn>
           <TableRowColumn>{info.startTime}</TableRowColumn>
@@ -108,6 +120,7 @@ class BugBashList extends Component {
           selectable
           multiSelectable
           enableSelectAll
+          onRowSelection = {this.handleSelect.bind(null)}
         >
           <TableHeader>
             <TableRow>
