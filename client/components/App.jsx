@@ -11,6 +11,7 @@ import Dashboard from './Dashboard';
 const styles = {
   base : {
     'html, body, .full-height' : {
+      margin: 0,
       height : '100%'
     },
 
@@ -18,6 +19,14 @@ const styles = {
       color          : '#00B7FF',
       textDecoration : 'none'
     }
+  },
+
+  container: {
+    '@media (min-width: 1201px)' : {
+        padding: '1%',
+        height: '90%',
+        overflowY: 'hidden'
+     }
   },
 
   leftPanel : {
@@ -29,7 +38,10 @@ const styles = {
     },
 
     '@media (min-width: 1201px)' : {
-      width : '48%'
+      width : '48%',
+      height : '100%',
+      height : '90%',
+      overflowY: 'auto'
     }
   },
 
@@ -53,7 +65,9 @@ const styles = {
 
     '@media (min-width: 1201px)' : {
       margin : '20px 0 0 1%',
-      width  : '51%'
+      width  : '51%',
+      height : '90%',
+      overflowY: 'auto'
     }
   }
 };
@@ -62,7 +76,7 @@ const styles = {
 class App extends Component {
   render () {
     return (
-      <div>
+      <div style = {styles.container}>
         <Style rules = {styles.base} />
         <MenuBar />
         <div style = {styles.leftPanel}>

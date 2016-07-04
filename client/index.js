@@ -20,7 +20,7 @@ import App from './components/App';
 render(
   <MuiThemeProvider muiTheme = {getMuiTheme()}>
     <Provider store = {rootStore}>
-      <StyleRoot>
+      <StyleRoot style = {{ height: '100%' }}>
         <App />
       </StyleRoot>
     </Provider>
