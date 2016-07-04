@@ -1,25 +1,6 @@
 import $ from 'jquery';
-import NProgress from 'nprogress';
 
-export const REFRESH_MEMBER = 'REFRESH_MEMBER';
-export function refreshMember (data) {
-  NProgress.done();
-  return {
-    type    : REFRESH_MEMBER,
-    content : data
-  };
-}
-
-export function fetchAllMember (ids) {
-  NProgress.start();
-  return (dispatch) => {
-    NProgress.set(0.4);
-    $.post('/member/', { ids: ids }, (data, textStatus, jqXHR) => {
-      NProgress.set(0.8);
-      dispatch(refreshMember(data));
-    });
-  };
-}
+import { fetchMembers } from './MemberActions';
 
 export const REFRESH_BUG_BASH = 'REFRESH_BUG_BASH';
 export function refreshBugBash (data) {
@@ -33,7 +14,7 @@ export function fetchAllBugBash () {
   return (dispatch) => {
     $.get('/bug-bash/', (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
-      dispatch(fetchAllMember());
+      dispatch(fetchMembers());
     });
   };
 }

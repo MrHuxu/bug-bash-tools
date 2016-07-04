@@ -9,7 +9,8 @@ import { red500, blue500 } from 'material-ui/styles/colors';
 import EditBugBash from './EditBugBash';
 import DeleteBugBash from './DeleteBugBash';
 
-import { fetchAllBugBash, fetchAllMember } from '../actions/BugBashActions';
+import { fetchAllBugBash } from '../actions/BugBashActions';
+import { fetchMembers } from '../actions/MemberActions';
 
 const styles = {
   btnWrapper : {
@@ -81,9 +82,9 @@ class BugBashList extends Component {
     const { ids, dispatch } = this.props;
 
     if ('string' === typeof rows) {
-      dispatch(fetchAllMember());
+      dispatch(fetchMembers());
     } else {
-      dispatch(fetchAllMember(rows.map(row => ids[row])));
+      dispatch(fetchMembers(rows.map(row => ids[row])));
     }
   };
 

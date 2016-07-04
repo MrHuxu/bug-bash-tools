@@ -1,6 +1,6 @@
 import {
   REFRESH_MEMBER
-} from '../actions/BugBashActions';
+} from '../actions/MemberActions';
 
 export function member (state = {
   names : [],
