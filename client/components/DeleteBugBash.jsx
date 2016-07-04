@@ -11,7 +11,7 @@ class DeleteBugBash extends Component {
     handleClose : React.PropTypes.func.isRequired,
     open        : React.PropTypes.bool.isRequired,
     data        : React.PropTypes.shape({
-      id   : React.PropTypes.number.isRequired,
+      _id  : React.PropTypes.number.isRequired,
       info : React.PropTypes.object.isRequired
     }).isRequired
   };

@@ -11,7 +11,6 @@ export function refreshMember (data) {
 export function fetchAllMember () {
   return (dispatch) => {
     $.get('/member/', (data, textStatus, jqXHR) => {
-      console.log(data);
       dispatch(refreshMember(data));
     });
   };

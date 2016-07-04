@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
@@ -20,9 +19,15 @@ const styles = {
 
 class BugBashList extends Component {
   static propTypes = {
-    style : React.PropTypes.object,
-    ids   : ImmutablePropTypes.listOf(React.PropTypes.number).isRequired,
-    infos : ImmutablePropTypes.mapOf(ImmutablePropTypes.mapOf(React.PropTypes.string)).isRequired
+    dispatch : React.PropTypes.func.isRequired,
+    style    : React.PropTypes.object,
+    ids      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    infos    : React.PropTypes.objectOf(React.PropTypes.shape({
+      name      : React.PropTypes.string.isRequired,
+      ticket    : React.PropTypes.string.isRequired,
+      startTime : React.PropTypes.string.isRequired,
+      endTime   : React.PropTypes.string.isRequired
+    })).isRequired
   };
 
   state = {

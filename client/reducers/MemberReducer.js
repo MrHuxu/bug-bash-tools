@@ -1,7 +1,6 @@
 import {
   REFRESH_MEMBER
 } from '../actions/BugBashActions';
-import Immutable from 'immutable';
 
 export function member (state = {
   names : [],

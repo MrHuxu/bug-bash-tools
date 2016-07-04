@@ -4,7 +4,16 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 
 class Summary extends Component {
   static propTypes = {
-    style : React.PropTypes.object
+    style    : React.PropTypes.object,
+    dispatch : React.PropTypes.func.isRequired,
+    names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    infos    : React.PropTypes.objectOf(React.PropTypes.shape({
+      1     : React.PropTypes.number.isRequired,
+      2     : React.PropTypes.number.isRequired,
+      3     : React.PropTypes.number.isRequired,
+      4     : React.PropTypes.number.isRequired,
+      score : React.PropTypes.number.isRequired
+    })).isRequired
   };
 
   render () {

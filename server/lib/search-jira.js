@@ -6,10 +6,14 @@ import db from './bug-bash-db';
 var generateJQL = (ids) => {
   return new Promise((resolve, reject) => {
     db.find({ _id: { $in: ids } }, (err, docs) => {
-      resolve(docs.reduce((prev, cur, index, arr) => {
-        var doc = arr[index];
-        return `${prev} ${index ? 'OR' : ''} (project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}"))`;
-      }, ''));
+      if (err) {
+        resolve('');
+      } else {
+        resolve(docs.reduce((prev, cur, index, arr) => {
+          var doc = arr[index];
+          return `${prev} ${index ? 'OR' : ''} (project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}"))`;
+        }, ''));
+      }
     });
   });
 };
@@ -39,14 +43,12 @@ var handleIssues = (issues) => {
 
 export function fetchBugBashData (bugBashIds) {
   return generateJQL(bugBashIds).then((condition) => {
-    console.log('=====' + condition + '======');
     if (condition.length) {
       return new Promise((resolve, reject) => {
         jira.searchJira(condition, {
           maxResults : 5000,
           fields     : ['creator', 'status', 'assignee', 'priority']
         }, (err, res) => {
-          console.log(res.issues.length);
           if (err) {
             resolve({});
           } else {

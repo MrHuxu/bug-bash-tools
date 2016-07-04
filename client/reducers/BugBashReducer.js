@@ -1,7 +1,6 @@
 import {
   REFRESH_BUG_BASH
 } from '../actions/BugBashActions';
-import Immutable from 'immutable';
 
 export function bugBash (state = {
   ids   : [],

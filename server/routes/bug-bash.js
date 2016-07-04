@@ -6,13 +6,13 @@ import db from '../lib/bug-bash-db';
 router.get('/', (req, res) => {
   db.find({}, (err, docs) => {
     res.send({
-      records : docs
+      records : err ? [] : docs
     });
   });
 });
 
 router.post('/new', (req, res) => {
-  db.insert(req.body, (err, newDocs) => {
+  db.insert(req.body, () => {
     res.send('created!');
   });
 });

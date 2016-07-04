@@ -6,7 +6,7 @@ import { fetchBugBashData } from '../lib/search-jira';
 
 router.get('/', (req, res) => {
   db.find({}, (err, docs) => {
-    fetchBugBashData(docs.map(doc => doc._id)).then(result => {
+    fetchBugBashData(err ? [] : docs.map(doc => doc._id)).then(result => {
       res.send(result);
     });
   });
