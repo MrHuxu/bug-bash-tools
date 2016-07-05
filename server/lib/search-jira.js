@@ -19,26 +19,30 @@ var generateJQL = (ids) => {
 };
 
 var handleIssues = (issues) => {
-  var nameScores = issues.reduce((prev, cur, index, arr) => {
+  var memberInfos = issues.reduce((prev, cur, index, arr) => {
     var issue = arr[index];
-    if (prev[issue.fields.creator.displayName] === undefined) prev[issue.fields.creator.displayName] = {};
-    if (prev[issue.fields.creator.displayName][issue.fields.priority.id]) {
-      ++prev[issue.fields.creator.displayName][issue.fields.priority.id];
-    } else {
-      prev[issue.fields.creator.displayName][issue.fields.priority.id] = 1;
-    }
+    if (prev[issue.fields.creator.displayName] === undefined) prev[issue.fields.creator.displayName] = { tickets: [] };
+    prev[issue.fields.creator.displayName].tickets.push({
+      ticket   : issue.key,
+      link     : `http://jira.freewheel.tv/browse/${issue.key}`,
+      summary  : issue.fields.summary,
+      assignee : issue.fields.assignee && issue.fields.assignee.displayName,
+      status   : issue.fields.status && issue.fields.status.name,
+      priority : issue.fields.priority && issue.fields.priority.id
+    });
+
     return prev;
   }, {});
 
-  for (let name in nameScores) {
-    nameScores[name][1] = nameScores[name][1] || 0;
-    nameScores[name][2] = nameScores[name][2] || 0;
-    nameScores[name][3] = nameScores[name][3] || 0;
-    nameScores[name][4] = nameScores[name][4] || 0;
-    nameScores[name].score = nameScores[name][1] * 5 + nameScores[name][2] * 3 + nameScores[name][3] * 1 + nameScores[name][4] * 0.5;
+  for (let name in memberInfos) {
+    memberInfos[name].score = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    memberInfos[name].tickets.forEach(ticket => {
+      ++memberInfos[name].score[ticket.priority];
+    });
+    memberInfos[name].score.sum = memberInfos[name].score[1] * 7 + memberInfos[name].score[2] * 3 + memberInfos[name].score[3] * 1 + memberInfos[name].score[4] * 0.5;
   }
 
-  return nameScores;
+  return memberInfos;
 };
 
 export function fetchBugBashData (bugBashIds) {
@@ -47,7 +51,7 @@ export function fetchBugBashData (bugBashIds) {
       return new Promise((resolve, reject) => {
         jira.searchJira(condition, {
           maxResults : 5000,
-          fields     : ['creator', 'status', 'assignee', 'priority']
+          fields     : ['summary', 'creator', 'status', 'assignee', 'priority']
         }, (err, res) => {
           if (err) {
             resolve({});

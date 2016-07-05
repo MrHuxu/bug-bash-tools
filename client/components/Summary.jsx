@@ -29,7 +29,7 @@ class Summary extends Component {
     return (
       <div style = {this.props.style}>
         <Table selectable = {false}>
-          <TableHeader>
+          <TableHeader displaySelectAll = {false}>
             <TableRow>
               <TableHeaderColumn>P1</TableHeaderColumn>
               <TableHeaderColumn>P2</TableHeaderColumn>

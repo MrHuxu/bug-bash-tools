@@ -45,7 +45,7 @@ class Dashboard extends Component {
   sortedNames = () => {
     const { names, infos } = this.props;
     names.sort((name1, name2) => {
-      return infos[name1].score > infos[name2].score ? -1 : 1;
+      return infos[name1].score.sum > infos[name2].score.sum ? -1 : 1;
     });
 
     return names;
@@ -54,18 +54,18 @@ class Dashboard extends Component {
   render () {
     const { infos } = this.props;
     const rows = this.sortedNames().map(name => {
-      var info = infos[name];
+      const { tickets, score } = infos[name];
       return (
         <div>
           <ListItem
             children = {
               <div style = {styles.lineContainer}>
                 <div style = {[styles.elemInLine, styles.nameCol]}>{name}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{info[1]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{info[2]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{info[3]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{info[4]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{info.score}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[1]}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[2]}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[3]}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[4]}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score.sum}</div>
               </div>
             }
             initiallyOpen = {false}
@@ -76,32 +76,32 @@ class Dashboard extends Component {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHeaderColumn>ID</TableHeaderColumn>
-                        <TableHeaderColumn>Name</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '15%'}}>Ticket</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '10%'}}>Priority</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '30%'}}>Summary</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '20%'}}>Assignee</TableHeaderColumn>
                         <TableHeaderColumn>Status</TableHeaderColumn>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow>
-                        <TableRowColumn>1</TableRowColumn>
-                        <TableRowColumn>John Smith</TableRowColumn>
-                        <TableRowColumn>Employed</TableRowColumn>
-                      </TableRow>
-                      <TableRow>
-                        <TableRowColumn>2</TableRowColumn>
-                        <TableRowColumn>Randal White</TableRowColumn>
-                        <TableRowColumn>Unemployed</TableRowColumn>
-                      </TableRow>
-                      <TableRow>
-                        <TableRowColumn>3</TableRowColumn>
-                        <TableRowColumn>Stephanie Sanders</TableRowColumn>
-                        <TableRowColumn>Employed</TableRowColumn>
-                      </TableRow>
-                      <TableRow>
-                        <TableRowColumn>4</TableRowColumn>
-                        <TableRowColumn>Steve Brown</TableRowColumn>
-                        <TableRowColumn>Employed</TableRowColumn>
-                      </TableRow>
+                      {tickets.map(i => {
+                        return (
+                          <TableRow>
+                            <TableRowColumn style = {{width: '15%'}}>
+                              <a
+                                target = '_link'
+                                href = {i.link}
+                              >
+                                {i.ticket}
+                              </a>
+                            </TableRowColumn>
+                            <TableRowColumn style = {{width: '10%'}}>{`P${i.priority}`}</TableRowColumn>
+                            <TableRowColumn style = {{width: '30%'}}>{i.summary}</TableRowColumn>
+                            <TableRowColumn style = {{width: '20%'}}>{i.assignee}</TableRowColumn>
+                            <TableRowColumn>{i.status}</TableRowColumn>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 }
