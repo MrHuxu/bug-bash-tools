@@ -9,4 +9,4 @@ var serveAssets = new WebpackDevServer(compiler, {
   publicPath : '/assets/'
 });
 
-serveAssets.listen(6789);
+serveAssets.listen(6788);
