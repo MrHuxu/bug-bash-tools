@@ -35,7 +35,7 @@ var handleIssues = (issues) => {
     nameScores[name][2] = nameScores[name][2] || 0;
     nameScores[name][3] = nameScores[name][3] || 0;
     nameScores[name][4] = nameScores[name][4] || 0;
-    nameScores[name].score = nameScores[name][1] * 3 + nameScores[name][2] * 2 + nameScores[name][3] * 1 + nameScores[name][4] * 0.5;
+    nameScores[name].score = nameScores[name][1] * 5 + nameScores[name][2] * 3 + nameScores[name][3] * 1 + nameScores[name][4] * 0.5;
   }
 
   return nameScores;
