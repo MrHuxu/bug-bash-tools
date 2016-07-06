@@ -11,7 +11,8 @@ const styles = {
   },
 
   lineContainer : {
-    padding : 0
+    padding  : 0,
+    fontSize : 13
   },
 
   elemInLine : {
@@ -74,7 +75,7 @@ class Dashboard extends Component {
               <ListItem
                 children = {
                   <Table>
-                    <TableHeader>
+                    <TableHeader displaySelectAll = {false}>
                       <TableRow>
                         <TableHeaderColumn style = {{width: '15%'}}>Ticket</TableHeaderColumn>
                         <TableHeaderColumn style = {{width: '10%'}}>Priority</TableHeaderColumn>
@@ -83,7 +84,7 @@ class Dashboard extends Component {
                         <TableHeaderColumn>Status</TableHeaderColumn>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody displayRowCheckbox = {false}>
                       {tickets.map(i => {
                         return (
                           <TableRow>
