@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 import { pink500, orange500, blue500, green500 } from 'material-ui/styles/colors';
 
 class SummaryChart extends Component {
+  myChart = undefined;
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
@@ -27,7 +28,8 @@ class SummaryChart extends Component {
       sum[4] += infos[name].score[4];
     });
     var canvas = document.getElementById('summary-chart');
-    var myChart = new Chart(canvas, {
+    if (this.myChart) this.myChart.destroy();
+    this.myChart = new Chart(canvas, {
       type : 'pie',
       data : {
         labels   : ['P1', 'P2', 'P3', 'P4'],
