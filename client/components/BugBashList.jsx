@@ -135,7 +135,7 @@ class BugBashList extends Component {
               <TableHeaderColumn>Actions</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody deselectOnClickaway={false}>
             {rows}
           </TableBody>
         </Table>

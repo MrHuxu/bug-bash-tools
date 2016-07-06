@@ -77,9 +77,8 @@ class Dashboard extends Component {
                   <Table>
                     <TableHeader displaySelectAll = {false}>
                       <TableRow>
-                        <TableHeaderColumn style = {{width: '15%'}}>Ticket</TableHeaderColumn>
-                        <TableHeaderColumn style = {{width: '10%'}}>Priority</TableHeaderColumn>
-                        <TableHeaderColumn style = {{width: '30%'}}>Summary</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '15%'}}>Ticket & Priority</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '40%'}}>Summary</TableHeaderColumn>
                         <TableHeaderColumn style = {{width: '20%'}}>Assignee</TableHeaderColumn>
                         <TableHeaderColumn>Status</TableHeaderColumn>
                       </TableRow>
@@ -97,7 +96,7 @@ class Dashboard extends Component {
                               </a>
                             </TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{`P${i.priority}`}</TableRowColumn>
-                            <TableRowColumn style = {{width: '30%'}}>{i.summary}</TableRowColumn>
+                            <TableRowColumn style = {{width: '42%'}}>{i.summary}</TableRowColumn>
                             <TableRowColumn style = {{width: '20%'}}>{i.assignee}</TableRowColumn>
                             <TableRowColumn>{i.status}</TableRowColumn>
                           </TableRow>
