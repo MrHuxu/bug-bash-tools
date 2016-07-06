@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import Chart from 'chart.js';
+import { pink500, orange500, blue500, green500 } from 'material-ui/styles/colors';
 
-class Summary extends Component {
+class SummaryChart extends Component {
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
@@ -16,7 +17,7 @@ class Summary extends Component {
     })).isRequired
   };
 
-  render () {
+  componentDidUpdate () {
     const { names, infos } = this.props;
     var sum = {1: 0, 2: 0, 3: 0, 4: 0};
     names.forEach(name => {
@@ -25,28 +26,24 @@ class Summary extends Component {
       sum[3] += infos[name].score[3];
       sum[4] += infos[name].score[4];
     });
+    var canvas = document.getElementById('summary-chart');
+    var myChart = new Chart(canvas, {
+      type : 'pie',
+      data : {
+        labels   : ['P1', 'P2', 'P3', 'P4'],
+        datasets : [{
+          data                 : [sum[1], sum[2], sum[3], sum[4]],
+          backgroundColor      : [pink500, orange500, blue500, green500],
+          hoverBackgroundColor : [pink500, orange500, blue500, green500]
+        }]
+      },
+      options : {}
+    });
+  }
 
+  render () {
     return (
-      <div style = {this.props.style}>
-        <Table selectable = {false}>
-          <TableHeader displaySelectAll = {false}>
-            <TableRow>
-              <TableHeaderColumn>P1</TableHeaderColumn>
-              <TableHeaderColumn>P2</TableHeaderColumn>
-              <TableHeaderColumn>P3</TableHeaderColumn>
-              <TableHeaderColumn>P4</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableRowColumn>{sum[1]}</TableRowColumn>
-              <TableRowColumn>{sum[2]}</TableRowColumn>
-              <TableRowColumn>{sum[3]}</TableRowColumn>
-              <TableRowColumn>{sum[4]}</TableRowColumn>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      <canvas id = 'summary-chart'></canvas>
     );
   }
 }
@@ -58,4 +55,4 @@ var mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Summary);
+export default connect(mapStateToProps)(SummaryChart);

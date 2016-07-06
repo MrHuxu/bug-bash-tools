@@ -4,6 +4,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { pink500, yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
+import SummaryChart from './SummaryChart';
 import Summary from './Summary';
 import BugBashList from './BugBashList';
 import Dashboard from './Dashboard';
@@ -22,27 +23,18 @@ const styles = {
   },
 
   container : {
-    '@media (min-width: 1201px)' : {
-      padding   : '1%',
-      height    : '90%',
-      overflowY : 'hidden'
-    }
+    padding : '1%'
   },
 
-  leftPanel : {
-    verticalAlign                : 'top',
-    display                      : 'inline-block',
-    margin                       : '20px 0 0 0',
-    padding                      : '0 0.1% 0.1% 0.1%',
-    '@media (max-width: 1200px)' : {
-      width : '100%'
-    },
+  chartContainer : {
+    margin : '20px 0 0 -8%',
+    width  : '40%'
+  },
 
-    '@media (min-width: 1201px)' : {
-      width     : '47.5%',
-      height    : '90%',
-      overflowY : 'auto'
-    }
+  tableContainer : {
+    margin  : '40px 0 0 0',
+    padding : '0 0.1% 0.1% 0.1%',
+    width   : '100%'
   },
 
   summary : {
@@ -54,24 +46,8 @@ const styles = {
     margin    : '20px 0 0 0'
   },
 
-  rightPanel : {
-    verticalAlign                : 'top',
-    display                      : 'inline-block',
-    padding                      : '0 0.1% 0.1% 0.1%',
-    '@media (max-width: 1200px)' : {
-      margin : '20px 0 0 0',
-      width  : '100%'
-    },
-
-    '@media (min-width: 1201px)' : {
-      margin    : '20px 0 0 1%',
-      width     : '51%',
-      height    : '90%',
-      overflowY : 'auto'
-    }
-  },
-
   memberList : {
+    margin    : '20px 0 0 0',
     borderTop : `2px solid ${blueGrey400}`
   }
 };
@@ -83,7 +59,10 @@ class App extends Component {
       <div style = {styles.container}>
         <Style rules = {styles.base} />
         <MenuBar />
-        <div style = {styles.leftPanel}>
+        <div style = {styles.chartContainer}>
+          <SummaryChart />
+        </div>
+        <div style = {styles.tableContainer}>
 
           <Card style = {styles.summary}>
             <CardHeader
@@ -102,9 +81,6 @@ class App extends Component {
               <BugBashList />
             </CardText>
           </Card>
-
-        </div>
-        <div style = {styles.rightPanel}>
 
           <Card style = {styles.memberList}>
             <CardHeader
