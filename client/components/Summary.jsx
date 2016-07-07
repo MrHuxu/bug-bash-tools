@@ -8,11 +8,21 @@ class Summary extends Component {
     dispatch : React.PropTypes.func.isRequired,
     names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      1     : React.PropTypes.number.isRequired,
-      2     : React.PropTypes.number.isRequired,
-      3     : React.PropTypes.number.isRequired,
-      4     : React.PropTypes.number.isRequired,
-      score : React.PropTypes.number.isRequired
+      tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
+        assignee : React.PropTypes.string,
+        link     : React.PropTypes.string.isRequired,
+        priority : React.PropTypes.string.isRequired,
+        status   : React.PropTypes.string.isRequired,
+        summary  : React.PropTypes.string.isRequired,
+        ticket   : React.PropTypes.string.isRequired
+      })).isRequired,
+      score : React.PropTypes.shape({
+        1   : React.PropTypes.number.isRequired,
+        2   : React.PropTypes.number.isRequired,
+        3   : React.PropTypes.number.isRequired,
+        4   : React.PropTypes.number.isRequired,
+        sum : React.PropTypes.number.isRequired
+      }).isRequired
     })).isRequired
   };
 

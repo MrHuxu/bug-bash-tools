@@ -29,17 +29,28 @@ const styles = {
 };
 
 @Radium
-class Dashboard extends Component {
+class MemberList extends Component {
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
     names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      1     : React.PropTypes.number.isRequired,
-      2     : React.PropTypes.number.isRequired,
-      3     : React.PropTypes.number.isRequired,
-      4     : React.PropTypes.number.isRequired,
-      score : React.PropTypes.number.isRequired
+      tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
+        assignee : React.PropTypes.string,
+        link     : React.PropTypes.string.isRequired,
+        priority : React.PropTypes.string.isRequired,
+        status   : React.PropTypes.string.isRequired,
+        summary  : React.PropTypes.string.isRequired,
+        ticket   : React.PropTypes.string.isRequired,
+        labels   : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+      })).isRequired,
+      score : React.PropTypes.shape({
+        1   : React.PropTypes.number.isRequired,
+        2   : React.PropTypes.number.isRequired,
+        3   : React.PropTypes.number.isRequired,
+        4   : React.PropTypes.number.isRequired,
+        sum : React.PropTypes.number.isRequired
+      }).isRequired
     })).isRequired
   };
 
@@ -77,17 +88,18 @@ class Dashboard extends Component {
                   <Table>
                     <TableHeader displaySelectAll = {false}>
                       <TableRow>
-                        <TableHeaderColumn style = {{width: '15%'}}>Ticket & Priority</TableHeaderColumn>
-                        <TableHeaderColumn style = {{width: '40%'}}>Summary</TableHeaderColumn>
-                        <TableHeaderColumn style = {{width: '20%'}}>Assignee</TableHeaderColumn>
-                        <TableHeaderColumn>Status</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '17%'}}>Ticket & Priority</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '43%'}}>Summary</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '15%'}}>Assignee</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '9%'}}>Status</TableHeaderColumn>
+                        <TableHeaderColumn>Historical?</TableHeaderColumn>
                       </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox = {false}>
                       {tickets.map(i => {
                         return (
                           <TableRow>
-                            <TableRowColumn style = {{width: '15%'}}>
+                            <TableRowColumn style = {{width: '10%'}}>
                               <a
                                 target = '_link'
                                 href = {i.link}
@@ -96,9 +108,10 @@ class Dashboard extends Component {
                               </a>
                             </TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{`P${i.priority}`}</TableRowColumn>
-                            <TableRowColumn style = {{width: '42%'}}>{i.summary}</TableRowColumn>
-                            <TableRowColumn style = {{width: '20%'}}>{i.assignee}</TableRowColumn>
-                            <TableRowColumn>{i.status}</TableRowColumn>
+                            <TableRowColumn style = {{width: '45%'}}>{i.summary}</TableRowColumn>
+                            <TableRowColumn style = {{width: '15%'}}>{i.assignee}</TableRowColumn>
+                            <TableRowColumn style = {{width: '10%'}}>{i.status}</TableRowColumn>
+                            <TableRowColumn>{i.labels.includes('historical-debts') ? '√' : ''}</TableRowColumn>
                           </TableRow>
                         );
                       })}
@@ -139,4 +152,4 @@ var mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps)(MemberList);

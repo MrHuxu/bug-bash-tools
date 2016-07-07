@@ -28,7 +28,8 @@ var handleIssues = (issues) => {
       summary  : issue.fields.summary,
       assignee : issue.fields.assignee && issue.fields.assignee.displayName,
       status   : issue.fields.status && issue.fields.status.name,
-      priority : issue.fields.priority && issue.fields.priority.id
+      priority : issue.fields.priority && issue.fields.priority.id,
+      labels   : issue.fields.labels
     });
 
     return prev;
@@ -51,7 +52,7 @@ export function fetchBugBashData (bugBashIds) {
       return new Promise((resolve, reject) => {
         jira.searchJira(condition, {
           maxResults : 5000,
-          fields     : ['summary', 'creator', 'status', 'assignee', 'priority']
+          fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels']
         }, (err, res) => {
           if (err) {
             resolve({});

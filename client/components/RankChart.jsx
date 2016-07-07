@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import echarts from 'echarts';
 
-class SummaryChart extends Component {
+class RankChart extends Component {
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
@@ -32,7 +32,8 @@ class SummaryChart extends Component {
   }
 
   rerenderChart () {
-    const { names, infos } = this.props;
+    const { infos } = this.props;
+    const names = this.sortedNames();
     var sum = {1: 0, 2: 0, 3: 0, 4: 0};
     names.forEach(name => {
       sum[1] += infos[name].score[1];
@@ -41,36 +42,52 @@ class SummaryChart extends Component {
       sum[4] += infos[name].score[4];
     });
     var myChart = echarts.init(this.refs.chartContainer);
-    var option =  {
-      title : {
-        text    : 'Summary',
-        subtext : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
-        x       : 'center'
-      },
+    var option = {
       tooltip : {
-        trigger   : 'item',
-        formatter : '{b} : {c} ({d}%)'
-      },
-      series : [
-        {
-          type   : 'pie',
-          radius : '55%',
-          center : ['50%', '60%'],
-          data   : [1, 2, 3, 4].map(i => {
-            return {value: sum[i], name: `P${i} (${sum[i]})`};
-          }),
-          itemStyle : {
-            emphasis : {
-              shadowBlur    : 10,
-              shadowOffsetX : 0,
-              shadowColor   : 'rgba(0, 0, 0, 0.5)'
-            }
-          }
+        trigger     : 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+          type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
         }
-      ]
+      },
+      legend : {
+        data : ['P1', 'P2', 'P3', 'P4']
+      },
+      grid : {
+        left         : '3%',
+        right        : '4%',
+        bottom       : '3%',
+        containLabel : true
+      },
+      xAxis : [
+        {
+          type : 'category',
+          data : names.slice(0, 40)
+        }
+      ],
+      yAxis : [{
+        type : 'value'
+      }],
+      series : [1, 2, 3, 4].map(i => {
+        return {
+          name  : `P${i}`,
+          type  : 'bar',
+          stack : 'Score',
+          data  : names.slice(0, 40).map(name => infos[name].score[i])
+        };
+      })
     };
+
     myChart.setOption(option);
   }
+
+  sortedNames = () => {
+    const { names, infos } = this.props;
+    names.sort((name1, name2) => {
+      return infos[name1].score.sum > infos[name2].score.sum ? -1 : 1;
+    });
+
+    return names;
+  };
 
   render () {
     return (
@@ -89,4 +106,4 @@ var mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SummaryChart);
+export default connect(mapStateToProps)(RankChart);

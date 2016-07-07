@@ -5,9 +5,9 @@ import { pink500, yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
 import SummaryChart from './SummaryChart';
-import Summary from './Summary';
+import RankChart from './RankChart';
 import BugBashList from './BugBashList';
-import Dashboard from './Dashboard';
+import MemberList from './MemberList';
 
 const styles = {
   base : {
@@ -26,9 +26,17 @@ const styles = {
     padding : '1%'
   },
 
-  chartContainer : {
-    margin : '20px 0 0 -8%',
-    width  : '40%'
+  summaryChart : {
+    display : 'inline-block',
+    margin  : '20px 0 0 -4%',
+    width   : '40%',
+    height  : '400px'
+  },
+
+  rankChart : {
+    display : 'inline-block',
+    width   : '60%',
+    height  : '400px'
   },
 
   tableContainer : {
@@ -59,19 +67,12 @@ class App extends Component {
       <div style = {styles.container}>
         <Style rules = {styles.base} />
         <MenuBar />
-        <div style = {styles.chartContainer}>
-          <SummaryChart />
-        </div>
-        <div style = {styles.tableContainer}>
 
-          <Card style = {styles.summary}>
-            <CardHeader
-              title = 'Summary'
-            />
-            <CardText>
-              <Summary />
-            </CardText>
-          </Card>
+        <SummaryChart style = {styles.summaryChart} />
+
+        <RankChart style = {styles.rankChart} />
+
+        <div style = {styles.tableContainer}>
 
           <Card style = {styles.bugBashList}>
             <CardHeader
@@ -87,7 +88,7 @@ class App extends Component {
               title = 'Member List'
             />
             <CardText>
-              <Dashboard />
+              <MemberList />
             </CardText>
           </Card>
 
