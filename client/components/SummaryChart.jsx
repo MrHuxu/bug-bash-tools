@@ -43,9 +43,12 @@ class SummaryChart extends Component {
     var myChart = echarts.init(this.refs.chartContainer);
     var option =  {
       title : {
-        text    : 'Summary',
-        subtext : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
-        x       : 'center'
+        text         : 'Summary',
+        subtext      : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
+        x            : 'center',
+        subtextStyle : {
+          color : '#888'
+        }
       },
       tooltip : {
         trigger   : 'item',

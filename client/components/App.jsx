@@ -28,15 +28,16 @@ const styles = {
 
   summaryChart : {
     display : 'inline-block',
-    margin  : '20px 0 0 -4%',
+    margin  : '10px 0 0 -4%',
     width   : '40%',
-    height  : '400px'
+    height  : '450px'
   },
 
   rankChart : {
+    margin  : '40px 0 0 -10%',
     display : 'inline-block',
-    width   : '60%',
-    height  : '400px'
+    width   : '74%',
+    height  : '450px'
   },
 
   tableContainer : {
