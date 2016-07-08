@@ -36,13 +36,14 @@ class MemberList extends Component {
     names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
-        assignee : React.PropTypes.string,
-        link     : React.PropTypes.string.isRequired,
-        priority : React.PropTypes.string.isRequired,
-        status   : React.PropTypes.string.isRequired,
-        summary  : React.PropTypes.string.isRequired,
-        ticket   : React.PropTypes.string.isRequired,
-        labels   : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+        assignee    : React.PropTypes.string,
+        link        : React.PropTypes.string.isRequired,
+        priority    : React.PropTypes.string.isRequired,
+        status      : React.PropTypes.string.isRequired,
+        summary     : React.PropTypes.string.isRequired,
+        ticket      : React.PropTypes.string.isRequired,
+        labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+        fixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
       score : React.PropTypes.shape({
         1   : React.PropTypes.number.isRequired,
@@ -89,9 +90,10 @@ class MemberList extends Component {
                     <TableHeader displaySelectAll = {false}>
                       <TableRow>
                         <TableHeaderColumn style = {{width: '17%'}}>Ticket & Priority</TableHeaderColumn>
-                        <TableHeaderColumn style = {{width: '43%'}}>Summary</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '39%'}}>Summary</TableHeaderColumn>
                         <TableHeaderColumn style = {{width: '15%'}}>Assignee</TableHeaderColumn>
                         <TableHeaderColumn style = {{width: '9%'}}>Status</TableHeaderColumn>
+                        <TableHeaderColumn style = {{width: '9%'}}>Fix Versions</TableHeaderColumn>
                         <TableHeaderColumn>Historical?</TableHeaderColumn>
                       </TableRow>
                     </TableHeader>
@@ -108,9 +110,10 @@ class MemberList extends Component {
                               </a>
                             </TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{`P${i.priority}`}</TableRowColumn>
-                            <TableRowColumn style = {{width: '45%'}}>{i.summary}</TableRowColumn>
+                            <TableRowColumn style = {{width: '40%'}}>{i.summary}</TableRowColumn>
                             <TableRowColumn style = {{width: '15%'}}>{i.assignee}</TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{i.status}</TableRowColumn>
+                            <TableRowColumn style = {{width: '9%'}}>{i.fixVersions.join(', ')}</TableRowColumn>
                             <TableRowColumn>{i.labels.includes('historical-debts') ? '√' : ''}</TableRowColumn>
                           </TableRow>
                         );

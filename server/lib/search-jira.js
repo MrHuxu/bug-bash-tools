@@ -11,7 +11,7 @@ var generateJQL = (ids) => {
       } else {
         resolve(docs.reduce((prev, cur, index, arr) => {
           var doc = arr[index];
-          return `${prev} ${index ? 'OR' : ''} (project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}"))`;
+          return `${prev} ${index ? 'OR' : ''} (project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}") and type = "INK Bug (sub-task)" and resolution not in ("Duplicate", "By Design", "Cannot Reproduce"))`;
         }, ''));
       }
     });
@@ -23,13 +23,14 @@ var handleIssues = (issues) => {
     var issue = arr[index];
     if (prev[issue.fields.creator.displayName] === undefined) prev[issue.fields.creator.displayName] = { tickets: [] };
     prev[issue.fields.creator.displayName].tickets.push({
-      ticket   : issue.key,
-      link     : `http://jira.freewheel.tv/browse/${issue.key}`,
-      summary  : issue.fields.summary,
-      assignee : issue.fields.assignee && issue.fields.assignee.displayName,
-      status   : issue.fields.status && issue.fields.status.name,
-      priority : issue.fields.priority && issue.fields.priority.id,
-      labels   : issue.fields.labels
+      ticket      : issue.key,
+      link        : `http://jira.freewheel.tv/browse/${issue.key}`,
+      summary     : issue.fields.summary,
+      assignee    : issue.fields.assignee && issue.fields.assignee.displayName,
+      status      : issue.fields.status && issue.fields.status.name,
+      priority    : issue.fields.priority && issue.fields.priority.id,
+      labels      : issue.fields.labels,
+      fixVersions : issue.fields.fixVersions && issue.fields.fixVersions.map(vertion => vertion.name)
     });
 
     return prev;
@@ -48,11 +49,12 @@ var handleIssues = (issues) => {
 
 export function fetchBugBashData (bugBashIds) {
   return generateJQL(bugBashIds).then((condition) => {
+    console.log(`JIRA Search Query:${condition}`);
     if (condition.length) {
       return new Promise((resolve, reject) => {
         jira.searchJira(condition, {
           maxResults : 5000,
-          fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels']
+          fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels', 'fixVersions']
         }, (err, res) => {
           if (err) {
             resolve({});
