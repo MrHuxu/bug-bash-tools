@@ -55,7 +55,7 @@ class MemberList extends Component {
     })).isRequired
   };
 
-  sortedNames = () => {
+  _sortedNames = () => {
     const { names, infos } = this.props;
     names.sort((name1, name2) => {
       return infos[name1].score.sum > infos[name2].score.sum ? -1 : 1;
@@ -66,7 +66,7 @@ class MemberList extends Component {
 
   render () {
     const { infos } = this.props;
-    const rows = this.sortedNames().map(name => {
+    const rows = this._sortedNames().map(name => {
       const { tickets, score } = infos[name];
       return (
         <div>

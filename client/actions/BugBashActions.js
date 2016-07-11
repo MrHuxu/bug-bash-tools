@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-import { fetchMembers } from './MemberActions';
-
 export const REFRESH_BUG_BASH = 'REFRESH_BUG_BASH';
 export function refreshBugBash (data) {
   return {
@@ -10,11 +8,11 @@ export function refreshBugBash (data) {
   };
 }
 
-export function fetchAllBugBash () {
+export function fetchAllBugBash (condition) {
+  console.log(condition);
   return (dispatch) => {
-    $.get('/bug-bash/', (data, textStatus, jqXHR) => {
+    $.get('/bug-bash/', condition, (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
-      dispatch(fetchMembers());
     });
   };
 }
@@ -23,7 +21,7 @@ export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
   return function (dispatch) {
     $.post('/bug-bash/new', data, (data, textStatus, jqXHR) => {
-      dispatch(fetchAllBugBash());
+      dispatch(fetchAllBugBash({}));
     });
   };
 }
@@ -36,7 +34,7 @@ export function updBugBash (data) {
       type    : 'PUT',
       data    : data,
       success : function (result) {
-        dispatch(fetchAllBugBash());
+        dispatch(fetchAllBugBash({}));
       }
     });
   };
@@ -50,7 +48,7 @@ export function delBugBash (data) {
       type    : 'DELETE',
       data    : data,
       success : function (result) {
-        dispatch(fetchAllBugBash());
+        dispatch(fetchAllBugBash({}));
       }
     });
   };

@@ -5,10 +5,16 @@ import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from 'material-ui/DropDownMenu';
 
 import { addBugBash, updBugBash } from '../actions/BugBashActions';
 
 const styles = {
+  versionContainer : {
+    margin : '0 0 20px 0'
+  },
+
   halfPanel : {
     display : 'inline-block',
     width   : '48%'
@@ -26,10 +32,16 @@ class EditBugBash extends Component {
     })
   };
 
-  handleSubmit = () => {
+  state = {
+    version : 1
+  };
+
+  _selectVersion = (event, index, value) => this.setState({ version: value });
+
+  _submit = () => {
     const { dispatch, data } = this.props;
 
-    const { name, ticket, startDate, startTime, endDate, endTime } = this.refs;
+    const { name, ticket, startDate, startTime, endDate, endTime, version } = this.refs;
     if (name.getValue().length) {
       const startDateObj = startDate.getDate();
       const startTimeObj = startTime.getTime();
@@ -38,6 +50,7 @@ class EditBugBash extends Component {
       const info = {
         name      : name.getValue(),
         ticket    : ticket.getValue(),
+        version   : version.getInputNode().innerText.replace('\n', ''),
         startTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
         endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       };
@@ -62,7 +75,7 @@ class EditBugBash extends Component {
         label = 'Ok'
         primary
         keyboardFocused
-        onTouchTap = {this.handleSubmit}
+        onTouchTap = {this._submit}
       />
     ];
 
@@ -75,6 +88,22 @@ class EditBugBash extends Component {
           open = {this.props.open}
           onRequestClose = {this.props.handleClose}
         >
+          <div style = {styles.versionContainer}>
+            Version
+            <DropDownMenu
+              ref = 'version'
+              value = {this.state.version}
+              onChange = {this._selectVersion}
+            >
+              <MenuItem value = {1} primaryText = '6.9' />
+              <MenuItem value = {2} primaryText = '6.8' />
+              <MenuItem value = {3} primaryText = '6.7' />
+              <MenuItem value = {4} primaryText = '6.6' />
+              <MenuItem value = {5} primaryText = '6.5' />
+              <MenuItem value = {6} primaryText = '6.4' />
+              <MenuItem value = {7} primaryText = '6.3' />
+            </DropDownMenu>
+          </div>
           <div style = {styles.halfPanel}>
             Name<br />
             <TextField

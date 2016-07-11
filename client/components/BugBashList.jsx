@@ -9,7 +9,6 @@ import { red500, blue500 } from 'material-ui/styles/colors';
 import EditBugBash from './EditBugBash';
 import DeleteBugBash from './DeleteBugBash';
 
-import { fetchAllBugBash } from '../actions/BugBashActions';
 import { fetchMembers } from '../actions/MemberActions';
 
 const styles = {
@@ -45,11 +44,12 @@ class BugBashList extends Component {
     }
   };
 
-  componentDidMount () {
-    this.props.dispatch(fetchAllBugBash());
+  componentDidUpdate () {
+    const { dispatch, ids } = this.props;
+    dispatch(fetchMembers(ids));
   }
 
-  handleOpenEdit = (_id, info, e) => {
+  _openEdit = (_id, info, e) => {
     e.stopPropagation();
     this.setState({
       openEdit : true,
@@ -60,7 +60,7 @@ class BugBashList extends Component {
     });
   };
 
-  handleOpenDelete = (_id, info, e) => {
+  _openDelete = (_id, info, e) => {
     e.stopPropagation();
     this.setState({
       openDelete : true,
@@ -71,14 +71,14 @@ class BugBashList extends Component {
     });
   };
 
-  handleClose = () => {
+  _closeDialogs = () => {
     this.setState({
       openEdit   : false,
       openDelete : false
     });
   };
 
-  handleSelect = (rows) => {
+  _selectBugBash = (rows) => {
     const { ids, dispatch } = this.props;
 
     if ('string' === typeof rows) {
@@ -98,17 +98,18 @@ class BugBashList extends Component {
         >
           <TableRowColumn>{info.name}</TableRowColumn>
           <TableRowColumn>{info.ticket}</TableRowColumn>
+          <TableRowColumn>{info.version}</TableRowColumn>
           <TableRowColumn>{info.startTime}</TableRowColumn>
           <TableRowColumn>{info.endTime}</TableRowColumn>
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton
-                onClick = {this.handleOpenEdit.bind(this, _id, info)}
+                onClick = {this._openEdit.bind(this, _id, info)}
               >
                 <EditorModeEdit color = {blue500} />
               </IconButton>
               <IconButton
-                onClick = {this.handleOpenDelete.bind(this, _id, info)}
+                onClick = {this._openDelete.bind(this, _id, info)}
               >
                 <ActionDelete color = {red500} />
               </IconButton>
@@ -124,12 +125,13 @@ class BugBashList extends Component {
           selectable
           multiSelectable
           enableSelectAll
-          onRowSelection = {this.handleSelect.bind(null)}
+          onRowSelection = {this._selectBugBash.bind(null)}
         >
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Ticket</TableHeaderColumn>
+              <TableHeaderColumn>Version</TableHeaderColumn>
               <TableHeaderColumn>Start Time</TableHeaderColumn>
               <TableHeaderColumn>End Time</TableHeaderColumn>
               <TableHeaderColumn>Actions</TableHeaderColumn>
@@ -142,12 +144,12 @@ class BugBashList extends Component {
         <EditBugBash
           open = {this.state.openEdit}
           data = {this.state.data}
-          handleClose = {this.handleClose}
+          handleClose = {this._closeDialogs}
         />
         <DeleteBugBash
           open = {this.state.openDelete}
           data = {this.state.data}
-          handleClose = {this.handleClose}
+          handleClose = {this._closeDialogs}
         />
       </div>
     );

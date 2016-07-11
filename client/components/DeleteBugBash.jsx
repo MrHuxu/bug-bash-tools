@@ -21,7 +21,7 @@ class DeleteBugBash extends Component {
     }).isRequired
   };
 
-  handleConfirmDelete = () => {
+  _confirmDelete = () => {
     const { dispatch, data } = this.props;
     dispatch(delBugBash(data.info));
     this.props.handleClose();
@@ -39,7 +39,7 @@ class DeleteBugBash extends Component {
         label = 'Delete'
         primary
         keyboardFocused
-        onTouchTap = {this.handleConfirmDelete}
+        onTouchTap = {this._confirmDelete}
       />
     ];
 
