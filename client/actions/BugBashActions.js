@@ -8,7 +8,7 @@ export function refreshBugBash (data) {
   };
 }
 
-export function fetchAllBugBash (condition) {
+export function fetchBugBash (condition) {
   console.log(condition);
   return (dispatch) => {
     $.get('/bug-bash/', condition, (data, textStatus, jqXHR) => {
@@ -20,8 +20,10 @@ export function fetchAllBugBash (condition) {
 export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
   return function (dispatch) {
-    $.post('/bug-bash/new', data, (data, textStatus, jqXHR) => {
-      dispatch(fetchAllBugBash({}));
+    $.post('/bug-bash/new', data.info, (result, textStatus, jqXHR) => {
+      if (data.info.version === data.currentVersion) {
+        dispatch(fetchBugBash({ version: data.currentVersion }));
+      }
     });
   };
 }
@@ -34,7 +36,7 @@ export function updBugBash (data) {
       type    : 'PUT',
       data    : data,
       success : function (result) {
-        dispatch(fetchAllBugBash({}));
+        dispatch(fetchBugBash({ version: data.currentVersion }));
       }
     });
   };
@@ -48,8 +50,16 @@ export function delBugBash (data) {
       type    : 'DELETE',
       data    : data,
       success : function (result) {
-        dispatch(fetchAllBugBash({}));
+        dispatch(fetchBugBash({ version: data.version }));
       }
     });
+  };
+}
+
+export const CHANGE_VERSION = 'CHANGE_VERSION';
+export function changeVersion (data) {
+  return {
+    type    : CHANGE_VERSION,
+    content : data
   };
 }

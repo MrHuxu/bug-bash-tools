@@ -5,7 +5,21 @@ import db from '../lib/bug-bash-db';
 import { fetchBugBashData } from '../lib/search-jira';
 
 router.get('/', (req, res) => {
-  db.find({ _id: { $in: req.query.ids || [] } }, (err, docs) => {
+  var condition;
+  console.log(req.query);
+  switch (req.query.ids) {
+    case undefined:
+      condition = { _id: { $in: [] } };
+      break;
+
+    case 'ALL':
+      condition = {};
+      break;
+
+    default:
+      condition = { _id: { $in: req.query.ids } };
+  }
+  db.find(condition, (err, docs) => {
     fetchBugBashData(err ? [] : docs.map(doc => doc._id)).then(result => {
       res.send(result);
     });

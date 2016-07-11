@@ -23,23 +23,24 @@ const styles = {
 
 class EditBugBash extends Component {
   static propTypes = {
-    dispatch    : React.PropTypes.func.isRequired,
-    handleClose : React.PropTypes.func.isRequired,
-    open        : React.PropTypes.bool.isRequired,
-    data        : React.PropTypes.shape({
+    dispatch       : React.PropTypes.func.isRequired,
+    handleClose    : React.PropTypes.func.isRequired,
+    currentVersion : React.PropTypes.string.isRequired,
+    open           : React.PropTypes.bool.isRequired,
+    data           : React.PropTypes.shape({
       id   : React.PropTypes.number,
       info : React.PropTypes.object
     })
   };
 
   state = {
-    version : 1
+    version : 9
   };
 
   _selectVersion = (event, index, value) => this.setState({ version: value });
 
   _submit = () => {
-    const { dispatch, data } = this.props;
+    const { dispatch, data, currentVersion } = this.props;
 
     const { name, ticket, startDate, startTime, endDate, endTime, version } = this.refs;
     if (name.getValue().length) {
@@ -55,9 +56,13 @@ class EditBugBash extends Component {
         endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       };
       dispatch((data && data._id) ? updBugBash({
-        _id  : data._id,
-        info : info
-      }) : addBugBash(info));
+        _id            : data._id,
+        info           : info,
+        currentVersion : currentVersion
+      }) : addBugBash({
+        info           : info,
+        currentVersion : currentVersion
+      }));
     }
     this.props.handleClose();
   };
@@ -95,13 +100,15 @@ class EditBugBash extends Component {
               value = {this.state.version}
               onChange = {this._selectVersion}
             >
-              <MenuItem value = {1} primaryText = '6.9' />
-              <MenuItem value = {2} primaryText = '6.8' />
-              <MenuItem value = {3} primaryText = '6.7' />
-              <MenuItem value = {4} primaryText = '6.6' />
-              <MenuItem value = {5} primaryText = '6.5' />
-              <MenuItem value = {6} primaryText = '6.4' />
-              <MenuItem value = {7} primaryText = '6.3' />
+              <MenuItem value = {9} primaryText = '6.10' />
+              <MenuItem value = {8} primaryText = '6.9' />
+              <MenuItem value = {7} primaryText = '6.8' />
+              <MenuItem value = {6} primaryText = '6.7' />
+              <MenuItem value = {5} primaryText = '6.6' />
+              <MenuItem value = {4} primaryText = '6.5' />
+              <MenuItem value = {3} primaryText = '6.4' />
+              <MenuItem value = {2} primaryText = '6.3' />
+              <MenuItem value = {1} primaryText = '6.2' />
             </DropDownMenu>
           </div>
           <div style = {styles.halfPanel}>

@@ -6,9 +6,9 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
-import { fetchAllBugBash } from '../actions/BugBashActions';
-
 import EditBugBash from './EditBugBash';
+
+import { changeVersion } from '../actions/BugBashActions';
 
 const styles = {
   title : {
@@ -18,20 +18,18 @@ const styles = {
 
 class MenuBar extends Component {
   static propTypes = {
-    dispatch : React.PropTypes.func.isRequire
+    dispatch : React.PropTypes.func.isRequired,
+    version  : React.PropTypes.string.isRequired
   };
 
   state = {
     open  : false,
-    value : 1
+    value : 10
   };
 
-  componentDidMount () {
-    this._refreshBugBashList();
-  }
-
   componentDidUpdate () {
-    this._refreshBugBashList();
+    var selectedVersion = this.refs.version.getInputNode().innerText.replace('\n', '');
+    this.props.dispatch(changeVersion(selectedVersion));
   }
 
   _open = () => {
@@ -44,11 +42,6 @@ class MenuBar extends Component {
     this.setState({
       open : false
     });
-  };
-
-  _refreshBugBashList = () => {
-    var selectedVersion = this.refs.version.getInputNode().innerText.replace('\n', '');
-    this.props.dispatch(fetchAllBugBash({ version: selectedVersion }));
   };
 
   _versionChange = (event, index, value) => {
@@ -66,15 +59,16 @@ class MenuBar extends Component {
               value = {this.state.value}
               onChange = {this._versionChange}
             >
-              <MenuItem value = {1} primaryText = '6.9' />
-              <MenuItem value = {2} primaryText = 'ALL' />
-              <MenuItem value = {3} primaryText = '6.8' />
-              <MenuItem value = {4} primaryText = '6.7' />
+              <MenuItem value = {10} primaryText = '6.10' />
+              <MenuItem value = {9} primaryText = 'ALL' />
+              <MenuItem value = {8} primaryText = '6.9' />
+              <MenuItem value = {7} primaryText = '6.8' />
+              <MenuItem value = {6} primaryText = '6.7' />
               <MenuItem value = {5} primaryText = '6.6' />
-              <MenuItem value = {6} primaryText = '6.5' />
-              <MenuItem value = {7} primaryText = '6.4' />
-              <MenuItem value = {8} primaryText = '6.3' />
-              <MenuItem value = {9} primaryText = '6.2' />
+              <MenuItem value = {4} primaryText = '6.5' />
+              <MenuItem value = {3} primaryText = '6.4' />
+              <MenuItem value = {2} primaryText = '6.3' />
+              <MenuItem value = {1} primaryText = '6.2' />
             </DropDownMenu>
           </ToolbarGroup>
           <ToolbarGroup>
@@ -90,10 +84,17 @@ class MenuBar extends Component {
         <EditBugBash
           open = {this.state.open}
           handleClose = {this._close}
+          currentVersion = {this.props.version}
         />
       </div>
     );
   }
 }
 
-export default connect()(MenuBar);
+var mapStateToProps = (state) => {
+  return {
+    version : state.bugBash.version
+  };
+};
+
+export default connect(mapStateToProps)(MenuBar);

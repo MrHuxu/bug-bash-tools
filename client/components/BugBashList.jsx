@@ -9,6 +9,7 @@ import { red500, blue500 } from 'material-ui/styles/colors';
 import EditBugBash from './EditBugBash';
 import DeleteBugBash from './DeleteBugBash';
 
+import { fetchBugBash } from '../actions/BugBashActions';
 import { fetchMembers } from '../actions/MemberActions';
 
 const styles = {
@@ -21,6 +22,7 @@ class BugBashList extends Component {
   static propTypes = {
     dispatch : React.PropTypes.func.isRequired,
     style    : React.PropTypes.object,
+    version  : React.PropTypes.string.isRequired,
     ids      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       name      : React.PropTypes.string.isRequired,
@@ -44,9 +46,20 @@ class BugBashList extends Component {
     }
   };
 
-  componentDidUpdate () {
-    const { dispatch, ids } = this.props;
-    dispatch(fetchMembers(ids));
+  componentDidMount () {
+    const { dispatch, version } = this.props;
+    dispatch(fetchBugBash({ version: version }));
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevState === this.state) {
+      const { dispatch, ids, version } = this.props;
+      if (prevProps.version === version) {
+        dispatch(fetchMembers(ids));
+      } else {
+        dispatch(fetchBugBash({ version: version }));
+      }
+    }
   }
 
   _openEdit = (_id, info, e) => {
@@ -81,10 +94,10 @@ class BugBashList extends Component {
   _selectBugBash = (rows) => {
     const { ids, dispatch } = this.props;
 
-    if ('string' === typeof rows) {
-      dispatch(fetchMembers());
-    } else {
+    if ('object' === typeof rows && rows.length) {
       dispatch(fetchMembers(rows.map(row => ids[row])));
+    } else {
+      dispatch(fetchMembers('ALL'));
     }
   };
 
@@ -145,6 +158,7 @@ class BugBashList extends Component {
           open = {this.state.openEdit}
           data = {this.state.data}
           handleClose = {this._closeDialogs}
+          currentVersion = {this.props.version}
         />
         <DeleteBugBash
           open = {this.state.openDelete}
@@ -158,8 +172,9 @@ class BugBashList extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    ids   : state.bugBash.ids,
-    infos : state.bugBash.infos
+    version : state.bugBash.version,
+    ids     : state.bugBash.ids,
+    infos   : state.bugBash.infos
   };
 };
 
