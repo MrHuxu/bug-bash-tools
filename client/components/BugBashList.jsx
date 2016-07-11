@@ -97,7 +97,7 @@ class BugBashList extends Component {
     if ('object' === typeof rows && rows.length) {
       dispatch(fetchMembers(rows.map(row => ids[row])));
     } else {
-      dispatch(fetchMembers('ALL'));
+      dispatch(fetchMembers(ids));
     }
   };
 
