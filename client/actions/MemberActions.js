@@ -14,7 +14,7 @@ export function fetchMembers (bugBashIds) {
   NProgress.start();
   return (dispatch) => {
     NProgress.set(0.4);
-    $.post('/member/', { ids: bugBashIds }, (data, textStatus, jqXHR) => {
+    $.get('/member/', { ids: bugBashIds }, (data, textStatus, jqXHR) => {
       NProgress.set(0.8);
       dispatch(refreshMember(data));
     });
