@@ -9,7 +9,6 @@ export function refreshBugBash (data) {
 }
 
 export function fetchBugBash (condition) {
-  console.log(condition);
   return (dispatch) => {
     $.get('/bug-bash/', condition, (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
