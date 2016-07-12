@@ -1,5 +1,6 @@
-import express from 'express';
+import fs from 'fs';
 import path from 'path';
+import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 
@@ -12,7 +13,16 @@ app.set('view engine', 'ejs');
 logger.token('reqBody', (req) => {
   return ' request: ' + JSON.stringify(req.body);
 });
-app.use(logger(':method :url :reqBody :status :response-time ms - :res[content-length]'));
+logger.token('remote-addr', (req) => {
+  return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+});
+if ('production' === process.env.NODE_ENV) {
+  if (!fs.existsSync('./log')) fs.mkdirSync('./log');
+  var logFile = fs.createWriteStream('./log/production.log', { flags: 'a' });
+  app.use(logger(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version"  :reqBody :status :res[content-length]', { stream: logFile }));
+} else {
+  app.use(logger(':method :url :reqBody :status :response-time ms - :res[content-length]'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended : true

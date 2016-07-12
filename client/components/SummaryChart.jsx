@@ -34,17 +34,19 @@ class SummaryChart extends Component {
   rerenderChart () {
     const { names, infos } = this.props;
     var sum = {1: 0, 2: 0, 3: 0, 4: 0};
+    var historical = 0;
     names.forEach(name => {
       sum[1] += infos[name].score[1];
       sum[2] += infos[name].score[2];
       sum[3] += infos[name].score[3];
       sum[4] += infos[name].score[4];
+      infos[name].tickets.forEach(ticket => historical += ticket.labels.includes('historical-debts') ? 1 : 0);
     });
     var myChart = echarts.init(this.refs.chartContainer);
     var option =  {
       title : {
         text         : 'Summary',
-        subtext      : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
+        subtext      : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}, historical: ${historical}`,
         x            : 'center',
         subtextStyle : {
           color : '#888'
