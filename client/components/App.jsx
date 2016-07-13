@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Radium, { Style } from 'radium';
+import { Style } from 'radium';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { pink500, yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
+import HistoricalChart from './HistoricalChart';
 import SummaryChart from './SummaryChart';
 import RankChart from './RankChart';
 import BugBashList from './BugBashList';
@@ -28,15 +29,22 @@ const styles = {
 
   summaryChart : {
     display : 'inline-block',
-    margin  : '10px 0 0 -4%',
+    margin  : '10px 0 0 -10%',
+    width   : '40%',
+    height  : '450px'
+  },
+
+  historicalChart : {
+    display : 'inline-block',
+    margin  : '10px 0 0 -20%',
     width   : '40%',
     height  : '450px'
   },
 
   rankChart : {
-    margin  : '40px 0 0 -10%',
+    margin  : '40px 0 0 -13%',
     display : 'inline-block',
-    width   : '74%',
+    width   : '63%',
     height  : '450px'
   },
 
@@ -61,7 +69,6 @@ const styles = {
   }
 };
 
-@Radium
 class App extends Component {
   render () {
     return (
@@ -70,6 +77,8 @@ class App extends Component {
         <MenuBar />
 
         <SummaryChart style = {styles.summaryChart} />
+
+        <HistoricalChart style = {styles.historicalChart} />
 
         <RankChart style = {styles.rankChart} />
 

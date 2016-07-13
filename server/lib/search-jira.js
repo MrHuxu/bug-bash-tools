@@ -3,28 +3,26 @@ const jira = new JiraApi('http', 'jira.freewheel.tv', 80, 'deploy', 'uideployzzz
 
 import db from './bug-bash-db';
 
-var generateJQL = (ids) => {
+var getBugBashes = (ids) => {
   return new Promise((resolve, reject) => {
     db.find({ _id: { $in: ids } }, (err, docs) => {
       if (err) {
-        resolve('');
+        resolve([]);
       } else {
-        resolve(docs.reduce((prev, cur, index, arr) => {
-          var doc = arr[index];
-          return `${prev} ${index ? 'OR' : ''} (project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}") and type = "INK Bug (sub-task)" and (status != FINISHED or resolution not in ("Duplicate", "By Design", "Cannot Reproduce")))`;
-        }, ''));
+        resolve(docs);
       }
     });
   });
 };
 
-var handleIssues = (issues) => {
+var processIssues = (issues, module) => {
   var memberInfos = issues.reduce((prev, cur, index, arr) => {
     var issue = arr[index];
     if (prev[issue.fields.creator.displayName] === undefined) prev[issue.fields.creator.displayName] = { tickets: [] };
     prev[issue.fields.creator.displayName].tickets.push({
       ticket      : issue.key,
       link        : `http://jira.freewheel.tv/browse/${issue.key}`,
+      module      : module,
       summary     : issue.fields.summary,
       assignee    : issue.fields.assignee && issue.fields.assignee.displayName,
       status      : issue.fields.status && issue.fields.status.name,
@@ -47,24 +45,47 @@ var handleIssues = (issues) => {
   return memberInfos;
 };
 
-export function fetchBugBashData (bugBashIds) {
-  return generateJQL(bugBashIds).then((condition) => {
-    console.log(`JIRA Search Query:${condition}`);
-    if (condition.length) {
-      return new Promise((resolve, reject) => {
-        jira.searchJira(condition, {
-          maxResults : 5000,
-          fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels', 'fixVersions']
-        }, (err, res) => {
-          if (err) {
-            resolve({});
-          } else {
-            resolve(handleIssues(res.issues));
-          }
-        });
+var getIssues = (docs) => {
+  return Promise.resolve(docs.map(doc => {
+    var condition = `project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}") and type = "INK Bug (sub-task)" and (status != FINISHED or resolution not in ("Duplicate", "By Design", "Cannot Reproduce"))`;
+    return new Promise((resolve, reject) => {
+      jira.searchJira(condition, {
+        maxResults : 5000,
+        fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels', 'fixVersions']
+      }, (err, res) => {
+        if (err) {
+          resolve({});
+        } else {
+          resolve(processIssues(res.issues, doc.name));
+        }
       });
-    } else {
-      return Promise.resolve({});
+    });
+  }));
+};
+
+var mergeResults = (results) => {
+  var merged = {};
+  results.forEach(result => {
+    for (var key in result) {
+      if (merged[key]) {
+        merged[key].tickets = merged[key].tickets.concat(result[key].tickets);
+        for (var priority in merged[key].score) {
+          merged[key].score[priority] = merged[key].score[priority] + result[key].score[priority];
+        }
+      } else {
+        merged[key] = result[key];
+      }
     }
+  });
+  return merged;
+};
+
+export function fetchBugBashData (bugBashIds) {
+  return getBugBashes(bugBashIds).then(docs => {
+    return getIssues(docs);
+  }).then(promiseSet => {
+    return Promise.all(promiseSet);
+  }).then(results => {
+    return Promise.resolve(mergeResults(results));
   });
 }

@@ -69,7 +69,7 @@ class MemberList extends Component {
     const rows = this._sortedNames().map(name => {
       const { tickets, score } = infos[name];
       return (
-        <div>
+        <div key = {name}>
           <ListItem
             children = {
               <div style = {styles.lineContainer}>
@@ -100,7 +100,7 @@ class MemberList extends Component {
                     <TableBody displayRowCheckbox = {false}>
                       {tickets.map(i => {
                         return (
-                          <TableRow>
+                          <TableRow key = {`${name}:ticket:${i.ticket}`}>
                             <TableRowColumn style = {{width: '10%'}}>
                               <a
                                 target = '_link'
@@ -113,8 +113,8 @@ class MemberList extends Component {
                             <TableRowColumn style = {{width: '40%'}}>{i.summary}</TableRowColumn>
                             <TableRowColumn style = {{width: '15%'}}>{i.assignee}</TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{i.status}</TableRowColumn>
-                            <TableRowColumn style = {{width: '9%'}}>{i.fixVersions.join(', ')}</TableRowColumn>
-                            <TableRowColumn>{i.labels.includes('historical-debts') ? '√' : ''}</TableRowColumn>
+                            <TableRowColumn style = {{width: '9%'}}>{i.fixVersions && i.fixVersions.join(', ')}</TableRowColumn>
+                            <TableRowColumn>{(i.labels && i.labels.includes('historical-debts')) ? '√' : ''}</TableRowColumn>
                           </TableRow>
                         );
                       })}

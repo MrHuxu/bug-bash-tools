@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import echarts from 'echarts';
 
-class SummaryChart extends Component {
+class HistoricalChart extends Component {
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
-    names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
         assignee : React.PropTypes.string,
         link     : React.PropTypes.string.isRequired,
+        module   : React.PropTypes.string.isRequired,
         priority : React.PropTypes.string.isRequired,
         status   : React.PropTypes.string.isRequired,
         summary  : React.PropTypes.string.isRequired,
@@ -32,19 +32,24 @@ class SummaryChart extends Component {
   }
 
   rerenderChart () {
-    const { names, infos } = this.props;
-    var sum = {1: 0, 2: 0, 3: 0, 4: 0};
-    names.forEach(name => {
-      sum[1] += infos[name].score[1];
-      sum[2] += infos[name].score[2];
-      sum[3] += infos[name].score[3];
-      sum[4] += infos[name].score[4];
-    });
+    const { infos } = this.props;
+    var sum = 0;
+    var historical = {};
+    for (var name in infos) {
+      var info = infos[name];
+      info.tickets.forEach(ticket => {
+        if (ticket.labels && ticket.labels.includes('historical-debts')) {
+          historical[ticket.module] = historical[ticket.module] ? historical[ticket.module] + 1 : 1;
+          ++sum;
+        }
+      });
+    }
+    var modules = Object.keys(historical);
     var myChart = echarts.init(this.refs.chartContainer);
     var option =  {
       title : {
-        text         : 'Summary',
-        subtext      : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
+        text         : 'Historical',
+        subtext      : `total: ${sum}`,
         x            : 'center',
         subtextStyle : {
           color : '#888'
@@ -59,9 +64,9 @@ class SummaryChart extends Component {
           type   : 'pie',
           radius : '55%',
           center : ['50%', '60%'],
-          data   : [1, 2, 3, 4].map(i => {
-            return {value: sum[i], name: `P${i} (${sum[i]})`};
-          }),
+          data   : modules.length ? modules.map(key => {
+            return { value: historical[key], name: `${key} (${historical[key]})` };
+          }) : [{ value: 0, name: 'None' }],
           itemStyle : {
             emphasis : {
               shadowBlur    : 10,
@@ -87,9 +92,8 @@ class SummaryChart extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    names : state.member.names,
     infos : state.member.infos
   };
 };
 
-export default connect(mapStateToProps)(SummaryChart);
+export default connect(mapStateToProps)(HistoricalChart);
