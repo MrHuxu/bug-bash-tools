@@ -9,7 +9,7 @@
 <body>
 
   <div id='bug-bash-tools' class='full-height'/>
-  <% if ('development' === process.env.NODE_ENV) { %>
+  <% if ('development' === env) { %>
     <script src='http://localhost:6789/assets/bundle.js'></script>
   <% } else { %>
     <script src='/bundle.js'></script>
