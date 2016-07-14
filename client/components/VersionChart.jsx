@@ -38,16 +38,19 @@ class VersionChart extends Component {
 
   rerenderChart = () => {
     const { infos } = this.props;
+    var noVersion = 0;
     var fixVersion = { "Won't Fix": 0 };
     for (var name in infos) {
       var info = infos[name];
       info.tickets.forEach(ticket => {
         if ("Won't Fix" === ticket.resolution) {
           ++fixVersion["Won't Fix"];
-        } else {
+        } else if (ticket.fixVersions.length) {
           ticket.fixVersions.forEach(version => {
             fixVersion[version] = fixVersion[version] ? fixVersion[version] + 1 : 1;
           });
+        } else {
+          ++noVersion;
         }
       });
     }
@@ -56,7 +59,7 @@ class VersionChart extends Component {
     var option =  {
       title : {
         text         : 'Fix Version',
-        subtext      : `Won't Fix: ${fixVersion["Won't Fix"]}`,
+        subtext      : `No version info: ${noVersion}`,
         x            : 'center',
         subtextStyle : {
           color : '#888'
