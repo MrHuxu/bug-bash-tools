@@ -4,8 +4,9 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { pink500, yellow900, blueGrey400 } from 'material-ui/styles/colors';
 
 import MenuBar from './MenuBar';
+import PriorityChart from './PriorityChart';
 import HistoricalChart from './HistoricalChart';
-import SummaryChart from './SummaryChart';
+import VersionChart from './VersionChart';
 import RankChart from './RankChart';
 import BugBashList from './BugBashList';
 import MemberList from './MemberList';
@@ -24,28 +25,21 @@ const styles = {
   },
 
   container : {
-    padding : '1%'
+    padding : '1%',
+    height  : '100%'
   },
 
-  summaryChart : {
+  pieChart : {
     display : 'inline-block',
-    margin  : '10px 0 0 -10%',
-    width   : '40%',
-    height  : '450px'
-  },
-
-  historicalChart : {
-    display : 'inline-block',
-    margin  : '10px 0 0 -20%',
-    width   : '40%',
-    height  : '450px'
+    margin  : '10px 0 0 0',
+    width   : '33%',
+    height  : '40%'
   },
 
   rankChart : {
-    margin  : '40px 0 0 -13%',
     display : 'inline-block',
-    width   : '63%',
-    height  : '450px'
+    width   : '100%',
+    height  : '40%'
   },
 
   tableContainer : {
@@ -76,9 +70,9 @@ class App extends Component {
         <Style rules = {styles.base} />
         <MenuBar />
 
-        <SummaryChart style = {styles.summaryChart} />
-
-        <HistoricalChart style = {styles.historicalChart} />
+        <PriorityChart style = {styles.pieChart} />
+        <HistoricalChart style = {styles.pieChart} />
+        <VersionChart style = {styles.pieChart} />
 
         <RankChart style = {styles.rankChart} />
 

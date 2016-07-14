@@ -28,7 +28,8 @@ var processIssues = (issues, module) => {
       status      : issue.fields.status && issue.fields.status.name,
       priority    : issue.fields.priority && issue.fields.priority.id,
       labels      : issue.fields.labels,
-      fixVersions : issue.fields.fixVersions && issue.fields.fixVersions.map(vertion => vertion.name)
+      fixVersions : issue.fields.fixVersions && issue.fields.fixVersions.map(vertion => vertion.name),
+      resolution  : issue.fields.resolution && issue.fields.resolution.name
     });
 
     return prev;
@@ -51,7 +52,7 @@ var getIssues = (docs) => {
     return new Promise((resolve, reject) => {
       jira.searchJira(condition, {
         maxResults : 5000,
-        fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels', 'fixVersions']
+        fields     : ['summary', 'creator', 'status', 'assignee', 'priority', 'labels', 'fixVersions', 'resolution']
       }, (err, res) => {
         if (err) {
           resolve({});

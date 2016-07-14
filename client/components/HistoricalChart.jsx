@@ -31,7 +31,12 @@ class HistoricalChart extends Component {
     this.rerenderChart();
   }
 
-  rerenderChart () {
+  sortKeys = (data) => {
+    var keys = Object.keys(data);
+    return keys.sort((key1, key2) => data[key1] > data[key2] ? -1 : 1);
+  };
+
+  rerenderChart = () => {
     const { infos } = this.props;
     var sum = 0;
     var historical = {};
@@ -44,7 +49,7 @@ class HistoricalChart extends Component {
         }
       });
     }
-    var modules = Object.keys(historical);
+    var modules = this.sortKeys(historical);
     var myChart = echarts.init(this.refs.chartContainer);
     var option =  {
       title : {
@@ -59,26 +64,24 @@ class HistoricalChart extends Component {
         trigger   : 'item',
         formatter : '{b} : {c} ({d}%)'
       },
-      series : [
-        {
-          type   : 'pie',
-          radius : '55%',
-          center : ['50%', '60%'],
-          data   : modules.length ? modules.map(key => {
-            return { value: historical[key], name: `${key} (${historical[key]})` };
-          }) : [{ value: 0, name: 'None' }],
-          itemStyle : {
-            emphasis : {
-              shadowBlur    : 10,
-              shadowOffsetX : 0,
-              shadowColor   : 'rgba(0, 0, 0, 0.5)'
-            }
+      series : [{
+        type   : 'pie',
+        radius : '55%',
+        center : ['50%', '60%'],
+        data   : modules.length ? modules.map(key => {
+          return { value: historical[key], name: `${key} (${historical[key]})` };
+        }) : [{ value: 0, name: 'None' }],
+        itemStyle : {
+          emphasis : {
+            shadowBlur    : 10,
+            shadowOffsetX : 0,
+            shadowColor   : 'rgba(0, 0, 0, 0.5)'
           }
         }
-      ]
+      }]
     };
     myChart.setOption(option);
-  }
+  };
 
   render () {
     return (
