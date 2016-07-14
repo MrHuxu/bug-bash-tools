@@ -46,8 +46,8 @@ var processIssues = (issues, module) => {
   return memberInfos;
 };
 
-var getIssues = (docs) => {
-  return Promise.resolve(docs.map(doc => {
+var buildPromiseSet = (docs) => {
+  return docs.map(doc => {
     var condition = `project = INK and parent = ${doc.ticket} and (created >= "${doc.startTime}" and created <= "${doc.endTime}") and type = "INK Bug (sub-task)" and (status != FINISHED or resolution not in ("Duplicate", "By Design", "Cannot Reproduce"))`;
     return new Promise((resolve, reject) => {
       jira.searchJira(condition, {
@@ -61,7 +61,7 @@ var getIssues = (docs) => {
         }
       });
     });
-  }));
+  });
 };
 
 var mergeResults = (results) => {
@@ -83,10 +83,10 @@ var mergeResults = (results) => {
 
 export function fetchBugBashData (bugBashIds) {
   return getBugBashes(bugBashIds).then(docs => {
-    return getIssues(docs);
+    return buildPromiseSet(docs);
   }).then(promiseSet => {
     return Promise.all(promiseSet);
   }).then(results => {
-    return Promise.resolve(mergeResults(results));
+    return mergeResults(results);
   });
 }
