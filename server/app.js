@@ -29,6 +29,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// => Rails => routes
 app.use('/bug-bash', bugBash);
 app.use('/member', member);
 

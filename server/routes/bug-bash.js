@@ -3,9 +3,11 @@ var router = express.Router();
 
 import db from '../lib/bug-bash-db';
 
-router.get('/', (req, res) => {
+router.get('/', (req, res) => {  // Rails => routes
+  // Rails => controller#actions
   var query = 'ALL' === req.query.version ? {} : req.query;
   db.find(query).sort({ startTime: -1 }).exec((err, docs) => {
+    // Rails => actions#render
     res.send({
       records : err ? [] : docs
     });
