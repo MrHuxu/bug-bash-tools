@@ -67,10 +67,10 @@ var buildPromiseSet = (docs) => {
 var mergeResults = (results) => {
   var merged = {};
   results.forEach(result => {
-    for (var key in result) {
+    for (let key in result) {
       if (merged[key]) {
         merged[key].tickets = merged[key].tickets.concat(result[key].tickets);
-        for (var priority in merged[key].score) {
+        for (let priority in merged[key].score) {
           merged[key].score[priority] = merged[key].score[priority] + result[key].score[priority];
         }
       } else {

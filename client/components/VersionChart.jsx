@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import echarts from 'echarts';
+
+import CustomPieChart from './CustomPieChart';
 
 class VersionChart extends Component {
   static propTypes = {
@@ -27,16 +28,12 @@ class VersionChart extends Component {
     })).isRequired
   };
 
-  componentDidUpdate () {
-    this.rerenderChart();
-  }
-
   sortKeys = (data) => {
     var keys = Object.keys(data);
     return keys.sort((key1, key2) => data[key1] > data[key2] ? -1 : 1);
   };
 
-  rerenderChart = () => {
+  getData = () => {
     const { infos } = this.props;
     var noVersion = 0;
     var fixVersion = { "Won't Fix": 0 };
@@ -55,45 +52,23 @@ class VersionChart extends Component {
       });
     }
     var versions = this.sortKeys(fixVersion);
-    var myChart = echarts.init(this.refs.chartContainer);
-    var option =  {
-      title : {
-        text         : 'Fix Version',
-        subtext      : `No version info: ${noVersion}`,
-        x            : 'center',
-        subtextStyle : {
-          color : '#888'
-        }
-      },
-      tooltip : {
-        trigger   : 'item',
-        formatter : '{b} : {c} ({d}%)'
-      },
-      series : [{
-        type   : 'pie',
-        radius : '55%',
-        center : ['50%', '60%'],
-        data   : versions.length ? versions.map(key => {
-          return { value: fixVersion[key], name: `${key} (${fixVersion[key]})` };
-        }) : [{ value: 0, name: 'None' }],
-        itemStyle : {
-          emphasis : {
-            shadowBlur    : 10,
-            shadowOffsetX : 0,
-            shadowColor   : 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }]
+
+    return {
+      subTitle : `No version info: ${noVersion}`,
+      data     : versions.length ? versions.map(key => {
+        return { value: fixVersion[key], name: `${key} (${fixVersion[key]})` };
+      }) : [{ value: 0, name: 'None' }]
     };
-    myChart.setOption(option);
   };
 
   render () {
     return (
-      <div
-        ref = 'chartContainer'
-        style = {this.props.style}>
-      </div>
+      <CustomPieChart
+        style = {this.props.style}
+        title = 'Fix Version'
+        subTitle = {this.getData().subTitle}
+        data = {this.getData().data}
+      />
     );
   }
 }

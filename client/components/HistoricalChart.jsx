@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import echarts from 'echarts';
+
+import CustomPieChart from './CustomPieChart';
 
 class HistoricalChart extends Component {
   static propTypes = {
@@ -27,16 +28,12 @@ class HistoricalChart extends Component {
     })).isRequired
   };
 
-  componentDidUpdate () {
-    this.rerenderChart();
-  }
-
   sortKeys = (data) => {
     var keys = Object.keys(data);
     return keys.sort((key1, key2) => data[key1] > data[key2] ? -1 : 1);
   };
 
-  rerenderChart = () => {
+  getData = () => {
     const { infos } = this.props;
     var sum = 0;
     var historical = {};
@@ -50,45 +47,23 @@ class HistoricalChart extends Component {
       });
     }
     var modules = this.sortKeys(historical);
-    var myChart = echarts.init(this.refs.chartContainer);
-    var option =  {
-      title : {
-        text         : 'Historical',
-        subtext      : `total: ${sum}`,
-        x            : 'center',
-        subtextStyle : {
-          color : '#888'
-        }
-      },
-      tooltip : {
-        trigger   : 'item',
-        formatter : '{b} : {c} ({d}%)'
-      },
-      series : [{
-        type   : 'pie',
-        radius : '55%',
-        center : ['50%', '60%'],
-        data   : modules.length ? modules.map(key => {
-          return { value: historical[key], name: `${key} (${historical[key]})` };
-        }) : [{ value: 0, name: 'None' }],
-        itemStyle : {
-          emphasis : {
-            shadowBlur    : 10,
-            shadowOffsetX : 0,
-            shadowColor   : 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }]
+
+    return {
+      subTitle : `total: ${sum}`,
+      data     : modules.length ? modules.map(key => {
+        return { value: historical[key], name: `${key} (${historical[key]})` };
+      }) : [{ value: 0, name: 'None' }]
     };
-    myChart.setOption(option);
   };
 
   render () {
     return (
-      <div
-        ref = 'chartContainer'
-        style = {this.props.style}>
-      </div>
+      <CustomPieChart
+        style = {this.props.style}
+        title = 'Historical'
+        subTitle = {this.getData().subTitle}
+        data = {this.getData().data}
+      />
     );
   }
 }

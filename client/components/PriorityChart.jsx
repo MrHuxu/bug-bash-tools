@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import echarts from 'echarts';
+
+import CustomPieChart from './CustomPieChart';
 
 class PriorityChart extends Component {
   static propTypes = {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
-    names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
         assignee : React.PropTypes.string,
@@ -27,71 +27,44 @@ class PriorityChart extends Component {
     })).isRequired
   };
 
-  componentDidUpdate () {
-    this.rerenderChart();
-  }
-
   sortKeys = (data) => {
     var keys = Object.keys(data);
     return keys.sort((key1, key2) => data[key1] > data[key2] ? -1 : 1);
   };
 
-  rerenderChart = () => {
-    const { names, infos } = this.props;
+  getData = () => {
+    const { infos } = this.props;
     var sum = {1: 0, 2: 0, 3: 0, 4: 0};
-    names.forEach(name => {
+    for (let name in infos) {
       sum[1] += infos[name].score[1];
       sum[2] += infos[name].score[2];
       sum[3] += infos[name].score[3];
       sum[4] += infos[name].score[4];
-    });
+    }
     var priorities = this.sortKeys(sum);
-    var myChart = echarts.init(this.refs.chartContainer);
-    var option =  {
-      title : {
-        text         : 'Priority',
-        subtext      : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
-        x            : 'center',
-        subtextStyle : {
-          color : '#888'
-        }
-      },
-      tooltip : {
-        trigger   : 'item',
-        formatter : '{b} : {c} ({d}%)'
-      },
-      series : [{
-        type   : 'pie',
-        radius : '55%',
-        center : ['50%', '60%'],
-        data   : priorities.map(i => {
-          return {value: sum[i], name: `P${i} (${sum[i]})`};
-        }),
-        itemStyle : {
-          emphasis : {
-            shadowBlur    : 10,
-            shadowOffsetX : 0,
-            shadowColor   : 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }]
+
+    return {
+      subTitle : `total: ${sum[1] + sum[2] + sum[3] + sum[4]}`,
+      data     : priorities.map(i => {
+        return {value: sum[i], name: `P${i} (${sum[i]})`};
+      })
     };
-    myChart.setOption(option);
   };
 
   render () {
     return (
-      <div
-        ref = 'chartContainer'
-        style = {this.props.style}>
-      </div>
+      <CustomPieChart
+        style = {this.props.style}
+        title = 'Priority'
+        subTitle = {this.getData().subTitle}
+        data = {this.getData().data}
+      />
     );
   }
 }
 
 var mapStateToProps = (state) => {
   return {
-    names : state.member.names,
     infos : state.member.infos
   };
 };
