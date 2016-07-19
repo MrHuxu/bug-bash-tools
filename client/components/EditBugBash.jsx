@@ -133,6 +133,7 @@ class EditBugBash extends Component {
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
                 defaultDate = {data ? new Date(data.info.startTime) : new Date()}
+                firstDayOfWeek = {0}
               />
             </div>
             <div style = {styles.halfPanel}>
