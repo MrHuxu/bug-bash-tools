@@ -49,7 +49,7 @@ class RankChart extends Component {
       },
       legend : { data: ['P1', 'P2', 'P3', 'P4'] },
       grid   : {
-        bottom       : '15%',
+        bottom       : '25%',
         containLabel : true
       },
       xAxis : [{
