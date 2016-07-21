@@ -36,9 +36,10 @@ var processIssues = (issues, module) => {
   }, {});
 
   for (let name in memberInfos) {
-    memberInfos[name].score = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    memberInfos[name].score = { 1: 0, 2: 0, 3: 0, 4: 0, historical: 0 };
     memberInfos[name].tickets.forEach(ticket => {
       ++memberInfos[name].score[ticket.priority];
+      memberInfos[name].score.historical += ticket.labels.includes('historical-debts') ? 1 : 0;
     });
     memberInfos[name].score.sum = memberInfos[name].score[1] * 7 + memberInfos[name].score[2] * 3 + memberInfos[name].score[3] * 1 + memberInfos[name].score[4] * 0.5;
   }

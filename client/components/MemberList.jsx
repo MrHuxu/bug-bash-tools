@@ -24,7 +24,7 @@ const styles = {
   },
 
   scoreCol : {
-    width : '17%'
+    width : '14%'
   }
 };
 
@@ -78,6 +78,7 @@ class MemberList extends Component {
                 <div style = {[styles.elemInLine, styles.scoreCol]}>{score[2]}</div>
                 <div style = {[styles.elemInLine, styles.scoreCol]}>{score[3]}</div>
                 <div style = {[styles.elemInLine, styles.scoreCol]}>{score[4]}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{score.historical}</div>
                 <div style = {[styles.elemInLine, styles.scoreCol]}>{score.sum}</div>
               </div>
             }
@@ -137,6 +138,7 @@ class MemberList extends Component {
           <div style = {[styles.elemInLine, styles.scoreCol]}>P2</div>
           <div style = {[styles.elemInLine, styles.scoreCol]}>P3</div>
           <div style = {[styles.elemInLine, styles.scoreCol]}>P4</div>
+          <div style = {[styles.elemInLine, styles.scoreCol]}>Historical</div>
           <div style = {[styles.elemInLine, styles.scoreCol]}>Score</div>
         </div>
         <Divider />
