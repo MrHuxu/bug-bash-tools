@@ -40,7 +40,7 @@ class HistoricalChart extends Component {
     for (var name in infos) {
       var info = infos[name];
       info.tickets.forEach(ticket => {
-        if (ticket.labels && ticket.labels.includes('historical-debts')) {
+        if (ticket.labels && ticket.labels.indexOf('historical-debts') !== -1) {
           historical[ticket.module] = historical[ticket.module] ? historical[ticket.module] + 1 : 1;
           ++sum;
         }

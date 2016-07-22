@@ -115,7 +115,7 @@ class MemberList extends Component {
                             <TableRowColumn style = {{width: '15%'}}>{i.assignee}</TableRowColumn>
                             <TableRowColumn style = {{width: '10%'}}>{i.status}</TableRowColumn>
                             <TableRowColumn style = {{width: '9%'}}>{i.fixVersions && i.fixVersions.join(', ')}</TableRowColumn>
-                            <TableRowColumn>{(i.labels && i.labels.includes('historical-debts')) ? '√' : ''}</TableRowColumn>
+                            <TableRowColumn>{(i.labels && i.labels.indexOf('historical-debts')) !== -1 ? '√' : ''}</TableRowColumn>
                           </TableRow>
                         );
                       })}

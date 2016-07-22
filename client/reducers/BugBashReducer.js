@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import {
   REFRESH_BUG_BASH,
   CHANGE_VERSION
@@ -12,12 +13,12 @@ export function bugBash (state = {
 
   switch (type) {
     case CHANGE_VERSION:
-      return Object.assign({}, state, {
+      return $.extend({}, state, {
         version : content
       });
 
     case REFRESH_BUG_BASH:
-      return Object.assign({}, state, {
+      return $.extend({}, state, {
         ids   : content.map(record => record._id),
         infos : content.reduce((prev, cur, index, arr) => {
           prev[arr[index]._id] = arr[index];
