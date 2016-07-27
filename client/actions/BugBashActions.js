@@ -19,7 +19,7 @@ export function fetchBugBash (condition) {
 export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
   return function (dispatch) {
-    $.post('/bug-bash/new', data.info, (result, textStatus, jqXHR) => {
+    $.post('/bug-bash/new', JSON.stringify(data.info), (result, textStatus, jqXHR) => {
       if (data.info.version === data.currentVersion) {
         dispatch(fetchBugBash({ version: data.currentVersion }));
       }

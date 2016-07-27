@@ -19,9 +19,9 @@ export function bugBash (state = {
 
     case REFRESH_BUG_BASH:
       return $.extend({}, state, {
-        ids   : content.map(record => record._id),
-        infos : content.reduce((prev, cur, index, arr) => {
-          prev[arr[index]._id] = arr[index];
+        ids   : (content || []).map(record => record.ID),
+        infos : (content || []).reduce((prev, cur, index, arr) => {
+          prev[arr[index].ID] = arr[index];
           return prev;
         }, {})
       });
