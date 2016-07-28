@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
@@ -55,9 +56,8 @@ class EditBugBash extends Component {
         StartTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
         EndTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       };
-      dispatch((data && data._id) ? updBugBash({
-        _id            : data._id,
-        info           : info,
+      dispatch((data && data.id) ? updBugBash({
+        info           : $.extend(info, { ID: data.id }),
         currentVersion : currentVersion
       }) : addBugBash({
         info           : info,
@@ -116,13 +116,13 @@ class EditBugBash extends Component {
             <TextField
               id = 'name'
               ref = 'name'
-              defaultValue = {data ? data.info.name : ''}
+              defaultValue = {data ? data.info.Name : ''}
             /><br />
             Main Ticket<br />
             <TextField
               id = 'ticket'
               ref = 'ticket'
-              defaultValue = {data ? data.info.ticket : ''}
+              defaultValue = {data ? data.info.Ticket : ''}
             /><br />
           </div>
           <div style = {styles.halfPanel}>
@@ -132,7 +132,7 @@ class EditBugBash extends Component {
                 ref = 'startDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
-                defaultDate = {data ? new Date(data.info.startTime) : new Date()}
+                defaultDate = {data ? new Date(data.info.StartTime) : new Date()}
                 firstDayOfWeek = {0}
               />
             </div>
@@ -141,7 +141,7 @@ class EditBugBash extends Component {
                 ref = 'startTime'
                 format = '24hr'
                 hintText = 'Start Time'
-                defaultTime = {data ? new Date(data.info.startTime) : new Date()}
+                defaultTime = {data ? new Date(data.info.StartTime) : new Date()}
               />
             </div>
             To<br />
@@ -150,7 +150,7 @@ class EditBugBash extends Component {
                 ref = 'endDate'
                 hintText = 'Bug Bash Start Date'
                 mode = 'landscape'
-                defaultDate = {data ? new Date(data.info.endTime) : new Date()}
+                defaultDate = {data ? new Date(data.info.EndTime) : new Date()}
               />
             </div>
             <div style = {styles.halfPanel}>
@@ -158,7 +158,7 @@ class EditBugBash extends Component {
                 ref = 'endTime'
                 format = '24hr'
                 hintText = 'End Time'
-                defaultTime = {data ? new Date(data.info.endTime) : new Date()}
+                defaultTime = {data ? new Date(data.info.EndTime) : new Date()}
               />
             </div>
           </div>

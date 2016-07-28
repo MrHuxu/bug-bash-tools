@@ -33,7 +33,7 @@ export function updBugBash (data) {
     $.ajax({
       url     : '/bug-bash/update',
       type    : 'PUT',
-      data    : JSON.stringify(data),
+      data    : JSON.stringify(data.info),
       success : function (result) {
         dispatch(fetchBugBash({ version: data.currentVersion }));
       }

@@ -66,10 +66,22 @@ func createBugBashAndRender(db *bolt.DB, bb *bugBash, r render.Render) {
 	})
 }
 
+func updateBugBashAndRender(db *bolt.DB, bb *bugBash, r render.Render) {
+	db.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte("bug-bash"))
+		buf, err := json.Marshal(bb)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		r.JSON(200, map[string]*bugBash{"record": bb})
+		return bucket.Put(itob(bb.ID), buf)
+	})
+}
+
 func destroyBugBashAndRender(db *bolt.DB, bb *bugBash, r render.Render) {
 	db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte("bug-bash"))
-		log.Println("======", bb)
 		err := bucket.Delete(itob(bb.ID))
 		if err != nil {
 			log.Fatal(err)
@@ -110,8 +122,14 @@ func main() {
 			createBugBashAndRender(db, &bb, r)
 		})
 
-		r.Put("/update", func(req *http.Request) {
-			log.Println(req)
+		r.Put("/update", func(req *http.Request, r render.Render) {
+			decoder := json.NewDecoder(req.Body)
+			var bb bugBash
+			err := decoder.Decode(&bb)
+			if err != nil {
+				log.Fatal(err)
+			}
+			updateBugBashAndRender(db, &bb, r)
 		})
 
 		r.Delete("/destroy", func(req *http.Request, r render.Render) {

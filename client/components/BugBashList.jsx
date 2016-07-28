@@ -63,23 +63,23 @@ class BugBashList extends Component {
     }
   }
 
-  _openEdit = (_id, info, e) => {
+  _openEdit = (id, info, e) => {
     e.stopPropagation();
     this.setState({
       openEdit : true,
       data     : {
-        _id  : _id,
+        id   : id,
         info : info
       }
     });
   };
 
-  _openDelete = (_id, info, e) => {
+  _openDelete = (id, info, e) => {
     e.stopPropagation();
     this.setState({
       openDelete : true,
       data       : {
-        _id  : _id,
+        id   : id,
         info : info
       }
     });
@@ -104,11 +104,11 @@ class BugBashList extends Component {
 
   render () {
     const { ids, infos } = this.props;
-    const rows = ids.map(_id => {
-      var info = infos[_id];
+    const rows = ids.map(id => {
+      var info = infos[id];
       return (
         <TableRow
-          key = {`bug-bash-${_id}`}
+          key = {`bug-bash-${id}`}
         >
           <TableRowColumn>{info.Name}</TableRowColumn>
           <TableRowColumn>{info.Ticket}</TableRowColumn>
@@ -118,12 +118,12 @@ class BugBashList extends Component {
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton
-                onClick = {this._openEdit.bind(this, _id, info)}
+                onClick = {this._openEdit.bind(this, id, info)}
               >
                 <EditorModeEdit color = {blue500} />
               </IconButton>
               <IconButton
-                onClick = {this._openDelete.bind(this, _id, info)}
+                onClick = {this._openDelete.bind(this, id, info)}
               >
                 <ActionDelete color = {red500} />
               </IconButton>
