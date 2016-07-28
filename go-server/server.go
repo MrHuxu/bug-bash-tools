@@ -63,7 +63,7 @@ func createBucket(db *bolt.DB, bucketName string) {
 	})
 }
 
-func findBugBashAndRender(db *bolt.DB, r render.Render) {
+func findBugBashAndRender(db *bolt.DB, version string, r render.Render) {
 	db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte("bug-bash"))
 		cursor := bucket.Cursor()
@@ -71,7 +71,9 @@ func findBugBashAndRender(db *bolt.DB, r render.Render) {
 		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
 			var bb bugBash
 			json.Unmarshal(v, &bb)
-			records = append(records, &bb)
+			if version == bb.Version && version == "ALL" {
+				records = append(records, &bb)
+			}
 		}
 		r.JSON(200, map[string][]*bugBash{"records": records})
 		return nil
@@ -186,6 +188,9 @@ func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*i
 		if err != nil {
 			panic(err)
 		}
+		defer func() {
+			results = mergeResults(results, map[string]*info{})
+		}()
 		results = mergeResults(results, formatIssues(issues, bb))
 	}
 
@@ -234,7 +239,11 @@ func main() {
 	// implement bug-bash series routers
 	server.Group("/bug-bash", func(router martini.Router) {
 		router.Get("/", func(req *http.Request, r render.Render) {
-			findBugBashAndRender(db, r)
+			var version string
+			for _, v := range req.URL.Query() {
+				version = v[0]
+			}
+			findBugBashAndRender(db, version, r)
 		})
 
 		router.Post("/new", func(req *http.Request, r render.Render) {
