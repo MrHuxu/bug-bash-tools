@@ -10,7 +10,7 @@ export function refreshBugBash (data) {
 
 export function fetchBugBash (condition) {
   return (dispatch) => {
-    $.get('/bug-bash/', condition, (data, textStatus, jqXHR) => {
+    $.get('/bug-bash/', JSON.stringify(condition), (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
     });
   };
@@ -19,8 +19,8 @@ export function fetchBugBash (condition) {
 export const ADD_BUG_BASH = 'ADD_BUG_BASH';
 export function addBugBash (data) {
   return function (dispatch) {
-    $.post('/bug-bash/new', data.info, (result, textStatus, jqXHR) => {
-      if (data.info.version === data.currentVersion) {
+    $.post('/bug-bash/new', JSON.stringify(data.info), (result, textStatus, jqXHR) => {
+      if (data.info.Version === data.currentVersion) {
         dispatch(fetchBugBash({ version: data.currentVersion }));
       }
     });
@@ -33,7 +33,7 @@ export function updBugBash (data) {
     $.ajax({
       url     : '/bug-bash/update',
       type    : 'PUT',
-      data    : data,
+      data    : JSON.stringify(data),
       success : function (result) {
         dispatch(fetchBugBash({ version: data.currentVersion }));
       }
@@ -47,7 +47,7 @@ export function delBugBash (data) {
     $.ajax({
       url     : '/bug-bash/destroy',
       type    : 'DELETE',
-      data    : data,
+      data    : JSON.stringify(data),
       success : function (result) {
         dispatch(fetchBugBash({ version: data.version }));
       }

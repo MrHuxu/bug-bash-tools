@@ -25,10 +25,11 @@ class BugBashList extends Component {
     version  : React.PropTypes.string.isRequired,
     ids      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      name      : React.PropTypes.string.isRequired,
-      ticket    : React.PropTypes.string.isRequired,
-      startTime : React.PropTypes.string.isRequired,
-      endTime   : React.PropTypes.string.isRequired
+      Name      : React.PropTypes.string.isRequired,
+      Ticket    : React.PropTypes.string.isRequired,
+      Version   : React.PropTypes.string.isRequired,
+      StartTime : React.PropTypes.string.isRequired,
+      EndTime   : React.PropTypes.string.isRequired
     })).isRequired
   };
 
@@ -109,11 +110,11 @@ class BugBashList extends Component {
         <TableRow
           key = {`bug-bash-${_id}`}
         >
-          <TableRowColumn>{info.name}</TableRowColumn>
-          <TableRowColumn>{info.ticket}</TableRowColumn>
-          <TableRowColumn>{info.version}</TableRowColumn>
-          <TableRowColumn>{info.startTime}</TableRowColumn>
-          <TableRowColumn>{info.endTime}</TableRowColumn>
+          <TableRowColumn>{info.Name}</TableRowColumn>
+          <TableRowColumn>{info.Ticket}</TableRowColumn>
+          <TableRowColumn>{info.Version}</TableRowColumn>
+          <TableRowColumn>{info.StartTime}</TableRowColumn>
+          <TableRowColumn>{info.EndTime}</TableRowColumn>
           <TableRowColumn>
             <div style = {styles.btnWrapper}>
               <IconButton

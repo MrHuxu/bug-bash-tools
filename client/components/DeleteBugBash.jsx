@@ -13,10 +13,11 @@ class DeleteBugBash extends Component {
     data        : React.PropTypes.shape({
       _id  : React.PropTypes.string.isRequired,
       info : React.PropTypes.shape({
-        name      : React.PropTypes.string.isRequired,
-        ticket    : React.PropTypes.string.isRequired,
-        startTime : React.PropTypes.string.isRequired,
-        endTime   : React.PropTypes.string.isRequired
+        Name      : React.PropTypes.string.isRequired,
+        Ticket    : React.PropTypes.string.isRequired,
+        Version   : React.PropTypes.string.isRequired,
+        StartTime : React.PropTypes.string.isRequired,
+        EndTime   : React.PropTypes.string.isRequired
       })
     }).isRequired
   };

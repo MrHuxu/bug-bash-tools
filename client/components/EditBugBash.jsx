@@ -49,11 +49,11 @@ class EditBugBash extends Component {
       const endDateObj = endDate.getDate();
       const endTimeObj = endTime.getTime();
       const info = {
-        name      : name.getValue(),
-        ticket    : ticket.getValue(),
-        version   : version.getInputNode().innerText.replace('\n', ''),
-        startTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
-        endTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
+        Name      : name.getValue(),
+        Ticket    : ticket.getValue(),
+        Version   : version.getInputNode().innerText.replace('\n', ''),
+        StartTime : startDateObj && startTimeObj && `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()} ${startTimeObj.getHours()}:${startTimeObj.getMinutes()}`,
+        EndTime   : endDateObj && endTimeObj && `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()} ${endTimeObj.getHours()}:${endTimeObj.getMinutes()}`
       };
       dispatch((data && data._id) ? updBugBash({
         _id            : data._id,
