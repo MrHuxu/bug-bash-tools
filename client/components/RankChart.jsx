@@ -16,7 +16,7 @@ class RankChart extends Component {
         Summary     : React.PropTypes.string.isRequired,
         Key         : React.PropTypes.string.isRequired,
         Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-        FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+        FixVersions : React.PropTypes.arrayOf(React.PropTypes.string)
       })).isRequired,
       Score : React.PropTypes.shape({
         P1         : React.PropTypes.number.isRequired,

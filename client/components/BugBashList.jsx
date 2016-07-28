@@ -23,7 +23,7 @@ class BugBashList extends Component {
     dispatch : React.PropTypes.func.isRequired,
     style    : React.PropTypes.object,
     version  : React.PropTypes.string.isRequired,
-    ids      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    ids      : React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       Name      : React.PropTypes.string.isRequired,
       Ticket    : React.PropTypes.string.isRequired,
@@ -37,7 +37,7 @@ class BugBashList extends Component {
     openEdit   : false,
     openDelete : false,
     data       : {
-      _id  : '',
+      id  : '',
       info : {
         name      : '',
         ticket    : '',

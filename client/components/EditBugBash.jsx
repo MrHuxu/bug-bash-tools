@@ -46,9 +46,9 @@ class EditBugBash extends Component {
     const { name, ticket, startDate, startTime, endDate, endTime, version } = this.refs;
     if (name.getValue().length) {
       const startDateObj = startDate.getDate();
-      const startTimeObj = startTime.getTime();
+      const startTimeObj = startTime.state.time;
       const endDateObj = endDate.getDate();
-      const endTimeObj = endTime.getTime();
+      const endTimeObj = endTime.state.time;
       const info = {
         Name      : name.getValue(),
         Ticket    : ticket.getValue(),

@@ -184,7 +184,7 @@ func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*i
 		condition := "project = INK and parent = " + bb.Ticket + " and (created >= \"" + bb.StartTime + "\" and created <= \"" + bb.EndTime + "\") and type = \"INK Bug (sub-task)\" and (status != FINISHED or resolution not in (\"Duplicate\", \"By Design\", \"Cannot Reproduce\"))"
 		issues, _, err := issue.Search(condition, nil)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		results = mergeResults(results, formatIssues(issues, bb))
 	}
