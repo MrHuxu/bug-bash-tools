@@ -10,11 +10,12 @@ class HistoricalChart extends Component {
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       Tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
         Assignee    : React.PropTypes.string,
+        Key         : React.PropTypes.string.isRequired,
         Link        : React.PropTypes.string.isRequired,
+        Module      : React.PropTypes.string.isRequired,
         Priority    : React.PropTypes.string.isRequired,
         Status      : React.PropTypes.string.isRequired,
         Summary     : React.PropTypes.string.isRequired,
-        Key         : React.PropTypes.string.isRequired,
         Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
         FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
@@ -40,9 +41,9 @@ class HistoricalChart extends Component {
     var historical = {};
     for (var name in infos) {
       var info = infos[name];
-      info.tickets.forEach(ticket => {
-        if (ticket.labels && ticket.labels.indexOf('historical-debts') !== -1) {
-          historical[ticket.module] = historical[ticket.module] ? historical[ticket.module] + 1 : 1;
+      info.Tickets.forEach(ticket => {
+        if (ticket.Labels && ticket.Labels.indexOf('historical-debts') !== -1) {
+          historical[ticket.Module] = historical[ticket.Module] ? historical[ticket.Module] + 1 : 1;
           ++sum;
         }
       });

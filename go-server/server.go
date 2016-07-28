@@ -38,6 +38,7 @@ type score struct {
 type ticket struct {
 	Key         string
 	Link        string
+	Module      string
 	Priority    string
 	Assignee    string
 	Status      string
@@ -119,28 +120,14 @@ func destroyBugBashAndRender(db *bolt.DB, bb *bugBash, r render.Render) {
 	})
 }
 
-func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*info {
-	var results []jira.Issue
-	for _, bb := range bbs {
-		condition := "project = INK and parent = " + bb.Ticket + " and (created >= \"" + bb.StartTime + "\" and created <= \"" + bb.EndTime + "\") and type = \"INK Bug (sub-task)\" and (status != FINISHED or resolution not in (\"Duplicate\", \"By Design\", \"Cannot Reproduce\"))"
-		issues, _, err := issue.Search(condition, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		results = append(results, issues...)
-	}
-
-	return formatIssues(results)
-}
-
-func formatIssues(issues []jira.Issue) map[string]*info {
+func formatIssues(issues []jira.Issue, bb *bugBash) map[string]*info {
 	results := make(map[string]*info)
 	for _, issue := range issues {
 		var fixVersions []string
 		for _, version := range issue.Fields.FixVersions {
 			fixVersions = append(fixVersions, version.Name)
 		}
-		t := ticket{issue.Key, "", issue.Fields.Priority.ID, issue.Fields.Assignee.Name, issue.Fields.Status.Name, issue.Fields.Summary, issue.Fields.Labels, fixVersions}
+		t := ticket{issue.Key, "", bb.Name, issue.Fields.Priority.ID, issue.Fields.Assignee.Name, issue.Fields.Status.Name, issue.Fields.Summary, issue.Fields.Labels, fixVersions}
 		t.Link = "http://jira.freewheel.tv/browse/" + issue.Key
 
 		name := issue.Fields.Creator.Name
@@ -170,6 +157,38 @@ func formatIssues(issues []jira.Issue) map[string]*info {
 			results[name].Score.Sum += 0.5
 		}
 	}
+	return results
+}
+
+func mergeResults(map1 map[string]*info, map2 map[string]*info) map[string]*info {
+	for k, v := range map1 {
+		var ts []*ticket
+		var s score
+		if map2[k] != nil {
+			ts = append(v.Tickets, map2[k].Tickets...)
+			s = score{v.Score.P1 + map2[k].Score.P1, v.Score.P2 + map2[k].Score.P2, v.Score.P3 + map2[k].Score.P3, v.Score.P4 + map2[k].Score.P4, v.Score.Historical + map2[k].Score.Historical, v.Score.Sum + map2[k].Score.Sum}
+			map1[k] = &info{ts, &s}
+		}
+	}
+	for k := range map2 {
+		if map1[k] == nil {
+			map1[k] = map2[k]
+		}
+	}
+	return map1
+}
+
+func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*info {
+	results := make(map[string]*info)
+	for _, bb := range bbs {
+		condition := "project = INK and parent = " + bb.Ticket + " and (created >= \"" + bb.StartTime + "\" and created <= \"" + bb.EndTime + "\") and type = \"INK Bug (sub-task)\" and (status != FINISHED or resolution not in (\"Duplicate\", \"By Design\", \"Cannot Reproduce\"))"
+		issues, _, err := issue.Search(condition, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = mergeResults(results, formatIssues(issues, bb))
+	}
+
 	return results
 }
 
