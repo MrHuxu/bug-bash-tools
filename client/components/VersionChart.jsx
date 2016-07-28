@@ -10,11 +10,12 @@ class VersionChart extends Component {
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
       Tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
         Assignee    : React.PropTypes.string,
+        Key         : React.PropTypes.string.isRequired,
         Link        : React.PropTypes.string.isRequired,
+        Module      : React.PropTypes.string.isRequired,
         Priority    : React.PropTypes.string.isRequired,
         Status      : React.PropTypes.string.isRequired,
         Summary     : React.PropTypes.string.isRequired,
-        Key         : React.PropTypes.string.isRequired,
         Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
         FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
