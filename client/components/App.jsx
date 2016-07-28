@@ -71,7 +71,6 @@ class App extends Component {
         <MenuBar />
 
         <PriorityChart style = {styles.pieChart} />
-        <HistoricalChart style = {styles.pieChart} />
         <VersionChart style = {styles.pieChart} />
 
         <RankChart style = {styles.rankChart} />

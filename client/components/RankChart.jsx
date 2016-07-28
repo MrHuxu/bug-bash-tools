@@ -8,21 +8,23 @@ class RankChart extends Component {
     dispatch : React.PropTypes.func.isRequired,
     names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
-        assignee : React.PropTypes.string,
-        link     : React.PropTypes.string.isRequired,
-        priority : React.PropTypes.string.isRequired,
-        status   : React.PropTypes.string.isRequired,
-        summary  : React.PropTypes.string.isRequired,
-        ticket   : React.PropTypes.string.isRequired,
-        labels   : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+      Tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
+        Assignee    : React.PropTypes.string,
+        Link        : React.PropTypes.string.isRequired,
+        Priority    : React.PropTypes.string.isRequired,
+        Status      : React.PropTypes.string.isRequired,
+        Summary     : React.PropTypes.string.isRequired,
+        Key         : React.PropTypes.string.isRequired,
+        Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+        FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
-      score : React.PropTypes.shape({
-        1   : React.PropTypes.number.isRequired,
-        2   : React.PropTypes.number.isRequired,
-        3   : React.PropTypes.number.isRequired,
-        4   : React.PropTypes.number.isRequired,
-        sum : React.PropTypes.number.isRequired
+      Score : React.PropTypes.shape({
+        P1         : React.PropTypes.number.isRequired,
+        P2         : React.PropTypes.number.isRequired,
+        P3         : React.PropTypes.number.isRequired,
+        P4         : React.PropTypes.number.isRequired,
+        Historical : React.PropTypes.number.isRequired,
+        Sum        : React.PropTypes.number.isRequired
       }).isRequired
     })).isRequired
   };
@@ -36,10 +38,10 @@ class RankChart extends Component {
     const names = this.sortedNames();
     var sum = {1: 0, 2: 0, 3: 0, 4: 0};
     names.forEach(name => {
-      sum[1] += infos[name].score[1];
-      sum[2] += infos[name].score[2];
-      sum[3] += infos[name].score[3];
-      sum[4] += infos[name].score[4];
+      sum[1] += infos[name].Score.P1;
+      sum[2] += infos[name].Score.P2;
+      sum[3] += infos[name].Score.P3;
+      sum[4] += infos[name].Score.P4;
     });
     var myChart = echarts.init(this.refs.chartContainer);
     var option = {
@@ -68,7 +70,7 @@ class RankChart extends Component {
           name  : `P${i}`,
           type  : 'bar',
           stack : 'Score',
-          data  : names.slice(0, 35).map(name => infos[name].score[i])
+          data  : names.slice(0, 35).map(name => infos[name].Score['P' + i])
         };
       })
     };
@@ -79,7 +81,7 @@ class RankChart extends Component {
   sortedNames = () => {
     const { names, infos } = this.props;
     names.sort((name1, name2) => {
-      return infos[name1].score.sum > infos[name2].score.sum ? -1 : 1;
+      return infos[name1].Score.Sum > infos[name2].Score.Sum ? -1 : 1;
     });
 
     return names;

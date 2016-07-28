@@ -35,22 +35,23 @@ class MemberList extends Component {
     dispatch : React.PropTypes.func.isRequired,
     names    : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
-        assignee    : React.PropTypes.string,
-        link        : React.PropTypes.string.isRequired,
-        priority    : React.PropTypes.string.isRequired,
-        status      : React.PropTypes.string.isRequired,
-        summary     : React.PropTypes.string.isRequired,
-        ticket      : React.PropTypes.string.isRequired,
-        labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-        fixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+      Tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
+        Assignee    : React.PropTypes.string,
+        Link        : React.PropTypes.string.isRequired,
+        Priority    : React.PropTypes.string.isRequired,
+        Status      : React.PropTypes.string.isRequired,
+        Summary     : React.PropTypes.string.isRequired,
+        Key         : React.PropTypes.string.isRequired,
+        Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+        FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
-      score : React.PropTypes.shape({
-        1   : React.PropTypes.number.isRequired,
-        2   : React.PropTypes.number.isRequired,
-        3   : React.PropTypes.number.isRequired,
-        4   : React.PropTypes.number.isRequired,
-        sum : React.PropTypes.number.isRequired
+      Score : React.PropTypes.shape({
+        P1         : React.PropTypes.number.isRequired,
+        P2         : React.PropTypes.number.isRequired,
+        P3         : React.PropTypes.number.isRequired,
+        P4         : React.PropTypes.number.isRequired,
+        Historical : React.PropTypes.number.isRequired,
+        Sum        : React.PropTypes.number.isRequired
       }).isRequired
     })).isRequired
   };
@@ -58,7 +59,7 @@ class MemberList extends Component {
   _sortedNames = () => {
     const { names, infos } = this.props;
     names.sort((name1, name2) => {
-      return infos[name1].score.sum > infos[name2].score.sum ? -1 : 1;
+      return infos[name1].Score.Sum > infos[name2].Score.Sum ? -1 : 1;
     });
 
     return names;
@@ -67,19 +68,19 @@ class MemberList extends Component {
   render () {
     const { infos } = this.props;
     const rows = this._sortedNames().map(name => {
-      const { tickets, score } = infos[name];
+      const { Tickets, Score } = infos[name];
       return (
         <div key = {name}>
           <ListItem
             children = {
               <div style = {styles.lineContainer}>
                 <div style = {[styles.elemInLine, styles.nameCol]}>{name}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[1]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[2]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[3]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score[4]}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score.historical}</div>
-                <div style = {[styles.elemInLine, styles.scoreCol]}>{score.sum}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.P1}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.P2}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.P3}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.P4}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.Historical}</div>
+                <div style = {[styles.elemInLine, styles.scoreCol]}>{Score.Sum}</div>
               </div>
             }
             initiallyOpen = {false}
@@ -99,23 +100,23 @@ class MemberList extends Component {
                       </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox = {false}>
-                      {tickets.map(i => {
+                      {Tickets.map(t => {
                         return (
-                          <TableRow key = {`${name}:ticket:${i.ticket}`}>
+                          <TableRow key = {`${name}:ticket:${t.Key}`}>
                             <TableRowColumn style = {{width: '10%'}}>
                               <a
-                                target = '_link'
-                                href = {i.link}
+                                target = '_Link'
+                                href = {t.Link}
                               >
-                                {i.ticket}
+                                {t.Key}
                               </a>
                             </TableRowColumn>
-                            <TableRowColumn style = {{width: '10%'}}>{`P${i.priority}`}</TableRowColumn>
-                            <TableRowColumn style = {{width: '40%'}}>{i.summary}</TableRowColumn>
-                            <TableRowColumn style = {{width: '15%'}}>{i.assignee}</TableRowColumn>
-                            <TableRowColumn style = {{width: '10%'}}>{i.status}</TableRowColumn>
-                            <TableRowColumn style = {{width: '9%'}}>{i.fixVersions && i.fixVersions.join(', ')}</TableRowColumn>
-                            <TableRowColumn>{(i.labels && i.labels.indexOf('historical-debts')) !== -1 ? '√' : ''}</TableRowColumn>
+                            <TableRowColumn style = {{width: '10%'}}>{`P${t.Priority}`}</TableRowColumn>
+                            <TableRowColumn style = {{width: '40%'}}>{t.Summary}</TableRowColumn>
+                            <TableRowColumn style = {{width: '15%'}}>{t.Assignee}</TableRowColumn>
+                            <TableRowColumn style = {{width: '10%'}}>{t.Status}</TableRowColumn>
+                            <TableRowColumn style = {{width: '9%'}}>{t.FixVersions && t.FixVersions.join(', ')}</TableRowColumn>
+                            <TableRowColumn>{(t.Labels && t.Labels.indexOf('historical-debts')) !== -1 ? '√' : ''}</TableRowColumn>
                           </TableRow>
                         );
                       })}

@@ -3,11 +3,13 @@ package main
 import (
 	"encoding/binary"
 	"encoding/json"
+	"github.com/andygrunwald/go-jira"
 	"github.com/boltdb/bolt"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type bugBash struct {
@@ -17,6 +19,31 @@ type bugBash struct {
 	Version   string
 	StartTime string
 	EndTime   string
+}
+
+type info struct {
+	Tickets []*ticket
+	Score   *score
+}
+
+type score struct {
+	P1         int
+	P2         int
+	P3         int
+	P4         int
+	Historical int
+	Sum        float32
+}
+
+type ticket struct {
+	Key         string
+	Link        string
+	Priority    string
+	Assignee    string
+	Status      string
+	Summary     string
+	Labels      []string
+	FixVersions []string
 }
 
 func createOrLoadDB() *bolt.DB {
@@ -92,6 +119,75 @@ func destroyBugBashAndRender(db *bolt.DB, bb *bugBash, r render.Render) {
 	})
 }
 
+func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*info {
+	var results []jira.Issue
+	for _, bb := range bbs {
+		condition := "project = INK and parent = " + bb.Ticket + " and (created >= \"" + bb.StartTime + "\" and created <= \"" + bb.EndTime + "\") and type = \"INK Bug (sub-task)\" and (status != FINISHED or resolution not in (\"Duplicate\", \"By Design\", \"Cannot Reproduce\"))"
+		issues, _, err := issue.Search(condition, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, issues...)
+	}
+
+	return formatIssues(results)
+}
+
+func formatIssues(issues []jira.Issue) map[string]*info {
+	results := make(map[string]*info)
+	for _, issue := range issues {
+		var fixVersions []string
+		for _, version := range issue.Fields.FixVersions {
+			fixVersions = append(fixVersions, version.Name)
+		}
+		t := ticket{issue.Key, "", issue.Fields.Priority.ID, issue.Fields.Assignee.Name, issue.Fields.Status.Name, issue.Fields.Summary, issue.Fields.Labels, fixVersions}
+		t.Link = "http://jira.freewheel.tv/browse/" + issue.Key
+
+		name := issue.Fields.Creator.Name
+		if results[name] == nil {
+			results[name] = &info{[]*ticket{&t}, &score{0, 0, 0, 0, 0, 0}}
+		} else {
+			results[name].Tickets = append(results[name].Tickets, &t)
+		}
+		for _, label := range issue.Fields.Labels {
+			if label == "historical-debts" {
+				results[name].Score.Historical++
+			}
+		}
+
+		switch t.Priority {
+		case "1":
+			results[name].Score.P1++
+			results[name].Score.Sum += 7
+		case "2":
+			results[name].Score.P2++
+			results[name].Score.Sum += 3
+		case "3":
+			results[name].Score.P3++
+			results[name].Score.Sum++
+		case "4":
+			results[name].Score.P4++
+			results[name].Score.Sum += 0.5
+		}
+	}
+	return results
+}
+
+func findMemberAndRender(issue *jira.IssueService, db *bolt.DB, ids []int, r render.Render) {
+	db.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte("bug-bash"))
+		var bbs []*bugBash
+		for _, id := range ids {
+			record := bucket.Get(itob(id))
+			var bb bugBash
+			json.Unmarshal(record, &bb)
+			bbs = append(bbs, &bb)
+		}
+		r.JSON(200, map[string]*info(fetchIssuesFromJira(issue, bbs)))
+		return nil
+	})
+}
+
 func itob(v int) []byte {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint64(b, uint64(v))
@@ -99,6 +195,16 @@ func itob(v int) []byte {
 }
 
 func main() {
+	jiraClient, err := jira.NewClient(nil, "http://jira.freewheel.tv/")
+	if err != nil {
+		panic(err)
+	}
+
+	res, err := jiraClient.Authentication.AcquireSessionCookie("deploy", "uideployzzz")
+	if err != nil || res == false {
+		panic(err)
+	}
+
 	server := martini.Classic()
 	server.Use(render.Renderer())
 
@@ -107,12 +213,12 @@ func main() {
 	createBucket(db, "bug-bash")
 
 	// implement bug-bash series routers
-	server.Group("/bug-bash", func(r martini.Router) {
-		r.Get("/", func(req *http.Request, r render.Render) {
+	server.Group("/bug-bash", func(router martini.Router) {
+		router.Get("/", func(req *http.Request, r render.Render) {
 			findBugBashAndRender(db, r)
 		})
 
-		r.Post("/new", func(req *http.Request, r render.Render) {
+		router.Post("/new", func(req *http.Request, r render.Render) {
 			decoder := json.NewDecoder(req.Body)
 			var bb bugBash
 			err := decoder.Decode(&bb)
@@ -122,7 +228,7 @@ func main() {
 			createBugBashAndRender(db, &bb, r)
 		})
 
-		r.Put("/update", func(req *http.Request, r render.Render) {
+		router.Put("/update", func(req *http.Request, r render.Render) {
 			decoder := json.NewDecoder(req.Body)
 			var bb bugBash
 			err := decoder.Decode(&bb)
@@ -132,7 +238,7 @@ func main() {
 			updateBugBashAndRender(db, &bb, r)
 		})
 
-		r.Delete("/destroy", func(req *http.Request, r render.Render) {
+		router.Delete("/destroy", func(req *http.Request, r render.Render) {
 			decoder := json.NewDecoder(req.Body)
 			var bb bugBash
 			err := decoder.Decode(&bb)
@@ -144,15 +250,22 @@ func main() {
 	})
 
 	// implement member series routers
-	server.Group("/member", func(r martini.Router) {
-		r.Get("/", func(req *http.Request) {
-			log.Println(req)
+	server.Group("/member", func(router martini.Router) {
+		router.Get("/", func(req *http.Request, r render.Render) {
+			var bugBashIds []int
+			for _, v := range req.URL.Query() {
+				for _, str := range v {
+					num, _ := strconv.Atoi(str)
+					bugBashIds = append(bugBashIds, num)
+				}
+			}
+			findMemberAndRender(jiraClient.Issue, db, bugBashIds, r)
 		})
 	})
 
 	// implement root router
-	server.Get("/", func(r render.Render) {
-		r.HTML(200, "hello", "jeremy")
+	server.Get("/", func(router render.Render) {
+		router.HTML(200, "index", "bug-bash-tool")
 	})
 	server.RunOnAddr(":13109")
 }

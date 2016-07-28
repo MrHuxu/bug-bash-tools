@@ -8,22 +8,23 @@ class HistoricalChart extends Component {
     style    : React.PropTypes.object,
     dispatch : React.PropTypes.func.isRequired,
     infos    : React.PropTypes.objectOf(React.PropTypes.shape({
-      tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
-        assignee : React.PropTypes.string,
-        link     : React.PropTypes.string.isRequired,
-        module   : React.PropTypes.string.isRequired,
-        priority : React.PropTypes.string.isRequired,
-        status   : React.PropTypes.string.isRequired,
-        summary  : React.PropTypes.string.isRequired,
-        ticket   : React.PropTypes.string.isRequired,
-        labels   : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+      Tickets : React.PropTypes.arrayOf(React.PropTypes.shape({
+        Assignee    : React.PropTypes.string,
+        Link        : React.PropTypes.string.isRequired,
+        Priority    : React.PropTypes.string.isRequired,
+        Status      : React.PropTypes.string.isRequired,
+        Summary     : React.PropTypes.string.isRequired,
+        Key         : React.PropTypes.string.isRequired,
+        Labels      : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+        FixVersions : React.PropTypes.arrayOf(React.PropTypes.string).isRequired
       })).isRequired,
-      score : React.PropTypes.shape({
-        1   : React.PropTypes.number.isRequired,
-        2   : React.PropTypes.number.isRequired,
-        3   : React.PropTypes.number.isRequired,
-        4   : React.PropTypes.number.isRequired,
-        sum : React.PropTypes.number.isRequired
+      Score : React.PropTypes.shape({
+        P1         : React.PropTypes.number.isRequired,
+        P2         : React.PropTypes.number.isRequired,
+        P3         : React.PropTypes.number.isRequired,
+        P4         : React.PropTypes.number.isRequired,
+        Historical : React.PropTypes.number.isRequired,
+        Sum        : React.PropTypes.number.isRequired
       }).isRequired
     })).isRequired
   };

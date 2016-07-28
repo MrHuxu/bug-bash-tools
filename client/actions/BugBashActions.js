@@ -10,7 +10,7 @@ export function refreshBugBash (data) {
 
 export function fetchBugBash (condition) {
   return (dispatch) => {
-    $.get('/bug-bash/', JSON.stringify(condition), (data, textStatus, jqXHR) => {
+    $.get('/bug-bash/', condition, (data, textStatus, jqXHR) => {
       dispatch(refreshBugBash(data.records));
     });
   };
