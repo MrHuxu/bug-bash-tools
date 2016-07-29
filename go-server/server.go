@@ -48,7 +48,7 @@ type ticket struct {
 }
 
 func createOrLoadDB() *bolt.DB {
-	db, err := bolt.Open("db/bug-bash-tool", 0600, nil)
+	db, err := bolt.Open("bug-bash-tool.db", 0600, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +71,7 @@ func findBugBashAndRender(db *bolt.DB, version string, r render.Render) {
 		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
 			var bb bugBash
 			json.Unmarshal(v, &bb)
-			if version == bb.Version && version == "ALL" {
+			if bb.Version == version || version == "ALL" {
 				records = append(records, &bb)
 			}
 		}
@@ -182,15 +182,16 @@ func mergeResults(map1 map[string]*info, map2 map[string]*info) map[string]*info
 
 func fetchIssuesFromJira(issue *jira.IssueService, bbs []*bugBash) map[string]*info {
 	results := make(map[string]*info)
+	defer func() {
+		results = mergeResults(results, map[string]*info{})
+	}()
 	for _, bb := range bbs {
+
 		condition := "project = INK and parent = " + bb.Ticket + " and (created >= \"" + bb.StartTime + "\" and created <= \"" + bb.EndTime + "\") and type = \"INK Bug (sub-task)\" and (status != FINISHED or resolution not in (\"Duplicate\", \"By Design\", \"Cannot Reproduce\"))"
 		issues, _, err := issue.Search(condition, nil)
 		if err != nil {
 			panic(err)
 		}
-		defer func() {
-			results = mergeResults(results, map[string]*info{})
-		}()
 		results = mergeResults(results, formatIssues(issues, bb))
 	}
 

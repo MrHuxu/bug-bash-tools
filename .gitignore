@@ -8,4 +8,4 @@ log/
 server/public/imgs/.DS_Store
 npm-debug.log
 dump.rdb
-go-server/db
+bug-bash-tool.db

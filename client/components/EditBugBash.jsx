@@ -35,10 +35,35 @@ class EditBugBash extends Component {
   };
 
   state = {
-    version : 9
+    version : 9,
+    nameField: {
+      valid: false
+    },
+    ticketField :{
+      valid: false,
+      errorMessage: "Follow this format: INK-XXXX"
+    }
   };
 
   _selectVersion = (event, index, value) => this.setState({ version: value });
+
+  _validateName = (event, value) => {
+    this.setState({
+      nameField: {
+        valid: !!value
+      }
+    });
+  };
+
+  _validateTicket = (event, value) => {
+    var re = /INK\-[0-9]+/g;
+    this.setState({
+      ticketField: {
+        valid: re.test(value),
+        errorMessage: value.length ? "Invalid ticket number" : "Follow this format: INK-XXXX"
+      }
+    });
+  };
 
   _submit = () => {
     const { dispatch, data, currentVersion } = this.props;
@@ -69,6 +94,8 @@ class EditBugBash extends Component {
 
   render () {
     const { data } = this.props;
+    const { nameField, ticketField } = this.state;
+
     const actions = [
       <FlatButton
         label = 'Cancel'
@@ -81,6 +108,7 @@ class EditBugBash extends Component {
         primary
         keyboardFocused
         onTouchTap = {this._submit}
+        disabled={!nameField.valid || !ticketField.valid}
       />
     ];
 
@@ -117,12 +145,15 @@ class EditBugBash extends Component {
               id = 'name'
               ref = 'name'
               defaultValue = {data ? data.info.Name : ''}
+              onChange = {this._validateName}
             /><br />
             Main Ticket<br />
             <TextField
               id = 'ticket'
               ref = 'ticket'
               defaultValue = {data ? data.info.Ticket : ''}
+              onChange = {this._validateTicket}
+              errorText={ticketField.valid ? null : ticketField.errorMessage}
             /><br />
           </div>
           <div style = {styles.halfPanel}>

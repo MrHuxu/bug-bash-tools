@@ -49,7 +49,7 @@ export function delBugBash (data) {
       type    : 'DELETE',
       data    : JSON.stringify(data),
       success : function (result) {
-        dispatch(fetchBugBash({ version: data.version }));
+        dispatch(fetchBugBash({ version: data.Version }));
       }
     });
   };
