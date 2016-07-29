@@ -24,7 +24,7 @@ class MenuBar extends Component {
 
   state = {
     open  : false,
-    value : 10
+    value : 9
   };
 
   componentDidUpdate () {
@@ -59,8 +59,14 @@ class MenuBar extends Component {
               value = {this.state.value}
               onChange = {this._versionChange}
             >
-              <MenuItem value = {10} primaryText = '6.10' />
-              <MenuItem value = {9} primaryText = 'ALL' />
+              <MenuItem value = {16} primaryText = 'ALL' />
+              <MenuItem value = {15} primaryText = '6.16' />
+              <MenuItem value = {14} primaryText = '6.15' />
+              <MenuItem value = {13} primaryText = '6.14' />
+              <MenuItem value = {12} primaryText = '6.13' />
+              <MenuItem value = {11} primaryText = '6.12' />
+              <MenuItem value = {10} primaryText = '6.11' />
+              <MenuItem value = {9} primaryText = '6.10' />
               <MenuItem value = {8} primaryText = '6.9' />
               <MenuItem value = {7} primaryText = '6.8' />
               <MenuItem value = {6} primaryText = '6.7' />

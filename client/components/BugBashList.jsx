@@ -37,7 +37,7 @@ class BugBashList extends Component {
     openEdit   : false,
     openDelete : false,
     data       : {
-      id  : '',
+      id   : '',
       info : {
         name      : '',
         ticket    : '',

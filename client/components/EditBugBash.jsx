@@ -35,13 +35,13 @@ class EditBugBash extends Component {
   };
 
   state = {
-    version : 9,
-    nameField: {
-      valid: false
+    version   : 9,
+    nameField : {
+      valid : false
     },
-    ticketField :{
-      valid: false,
-      errorMessage: "Follow this format: INK-XXXX"
+    ticketField : {
+      valid        : false,
+      errorMessage : 'Follow this format: INK-XXXX'
     }
   };
 
@@ -49,8 +49,8 @@ class EditBugBash extends Component {
 
   _validateName = (event, value) => {
     this.setState({
-      nameField: {
-        valid: !!value
+      nameField : {
+        valid : !!value
       }
     });
   };
@@ -58,9 +58,9 @@ class EditBugBash extends Component {
   _validateTicket = (event, value) => {
     var re = /INK\-[0-9]+/g;
     this.setState({
-      ticketField: {
-        valid: re.test(value),
-        errorMessage: value.length ? "Invalid ticket number" : "Follow this format: INK-XXXX"
+      ticketField : {
+        valid        : re.test(value),
+        errorMessage : value.length ? 'Invalid ticket number' : 'Follow this format: INK-XXXX'
       }
     });
   };
@@ -108,7 +108,7 @@ class EditBugBash extends Component {
         primary
         keyboardFocused
         onTouchTap = {this._submit}
-        disabled={!nameField.valid || !ticketField.valid}
+        disabled = {!nameField.valid || !ticketField.valid}
       />
     ];
 
@@ -128,6 +128,12 @@ class EditBugBash extends Component {
               value = {this.state.version}
               onChange = {this._selectVersion}
             >
+              <MenuItem value = {15} primaryText = '6.16' />
+              <MenuItem value = {14} primaryText = '6.15' />
+              <MenuItem value = {13} primaryText = '6.14' />
+              <MenuItem value = {12} primaryText = '6.13' />
+              <MenuItem value = {11} primaryText = '6.12' />
+              <MenuItem value = {10} primaryText = '6.11' />
               <MenuItem value = {9} primaryText = '6.10' />
               <MenuItem value = {8} primaryText = '6.9' />
               <MenuItem value = {7} primaryText = '6.8' />
@@ -153,7 +159,7 @@ class EditBugBash extends Component {
               ref = 'ticket'
               defaultValue = {data ? data.info.Ticket : ''}
               onChange = {this._validateTicket}
-              errorText={ticketField.valid ? null : ticketField.errorMessage}
+              errorText = {ticketField.valid ? null : ticketField.errorMessage}
             /><br />
           </div>
           <div style = {styles.halfPanel}>
